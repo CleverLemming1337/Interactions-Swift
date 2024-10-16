@@ -71,31 +71,3 @@ public struct Button: Interaction {
     }
     
 }
-
-public enum Key: UInt8 {
-    case null = 0
-    case cA = 1
-    case cB = 2
-    case cD = 4
-    case tab = 9
-    case enter = 10
-    case arrowUp = 27
-    case n0 = 48
-    case n1 = 49
-    case n2 = 50
-    case n3 = 51
-    case n4 = 52
-    case n5 = 53
-    case n6 = 54
-    case n7 = 55
-    case n8 = 56
-    case n9 = 57
-    
-    func toString() -> String {
-        return keyNames[self.rawValue] ?? ""
-    }
-}
-
-public let keyNames: [UInt8: String] = [
-    1: "^A"
-]

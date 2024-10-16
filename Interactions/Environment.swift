@@ -12,6 +12,7 @@ public class EnvironmentProvider: @unchecked Sendable {
     
     public let renderer = AppRenderer.shared
     public let keyBinder = KeyBinder.shared
+    public let logger = Logger.shared
 }
 
 @propertyWrapper public struct Environment<T> {

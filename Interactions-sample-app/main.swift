@@ -16,7 +16,8 @@ struct InteractionsSampleApp: App {
 }
 
 struct HelloWorld: Interaction {
-    @Environment(\.renderer) var renderer
+    @Environment(\.logger) var logger
+    
     
     var body: some Renderable {
         RawText("Hello, world!")
@@ -26,6 +27,20 @@ struct HelloWorld: Interaction {
             .bold()
         Button(.cA, "Press me with ^A") {
             print("Button pressed")
+        }
+        Button(.cB, "Add log message") {
+            let log = Log(level: .info, message: "This is an info message")
+            logger?.log(log)
+        }
+        Button(.cD, "Show log") {
+            logger?.printLogs()
+        }
+        Button(.arrowUp, "Try keys") {
+            var key = Key.null
+            repeat {
+                key = readKey()
+                print(key.toString(), key.rawValue)
+            } while key != .enter
         }
     }
 }
