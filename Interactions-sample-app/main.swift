@@ -32,6 +32,19 @@ struct About: Scene {
     }
 }
 
+struct Counter: Scene {
+    let count = StateItem(0)
+    
+    let title = "State demo"
+    
+    var body: some Renderable {
+        Text("Counter is at \(count.value)")
+        Button(Key.cA, "Count up") {
+            count.value += 1
+        }
+    }
+}
+
 struct HelloWorld: Interaction {
     @Environment(\.logger) var logger
     @Environment(\.settings) var settings
@@ -66,6 +79,9 @@ struct HelloWorld: Interaction {
         ])
         NavigationLink(key: .f1, name: "Help") {
             About()
+        }
+        NavigationLink(key: .n1, name: "State demo") {
+            Counter()
         }
     }
 }
