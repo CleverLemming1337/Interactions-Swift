@@ -43,7 +43,7 @@ struct HelloWorld: Interaction {
         Text("This text is bold")
             .bold()
         Text("This text is in the app's accent color")
-            .tint(settings.accentColor)
+            .tint()
         Button(.cA, "Press me with ^A") {
             print("Button pressed")
         }

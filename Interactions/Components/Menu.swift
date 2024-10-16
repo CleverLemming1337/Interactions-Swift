@@ -53,7 +53,7 @@ public struct Navigation: Interaction {
                 }
                 renderer.renderApp()
             }
-            .tint(.cyan)
+            .tint()
         }
         
     }

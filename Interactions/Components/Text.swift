@@ -33,7 +33,7 @@ public extension Formattable {
     func reversed() -> Formattable {
         return Text("\u{001B}[7m\(self.render())\u{001B}[27m")
     }
-    func tint(_ color: Color) -> Formattable {
+    func tint(_ color: Color = EnvironmentProvider.shared.settings.accentColor) -> Formattable {
         return Text("\u{001B}[3\(color.rawValue)m\(self.render())\u{001B}[39m")
     }
     func background(_ color: Color) -> Formattable {
