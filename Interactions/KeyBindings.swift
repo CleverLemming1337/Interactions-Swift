@@ -6,7 +6,6 @@
 //
 
 import Foundation
-<<<<<<< HEAD
 
 public class KeyBinder: @unchecked Sendable {
     static let shared = KeyBinder()
@@ -23,5 +22,3 @@ public class KeyBinder: @unchecked Sendable {
         }
     }
 }
-=======
->>>>>>> d9a840d326835afef9d18fa1213edace4e7aca2a

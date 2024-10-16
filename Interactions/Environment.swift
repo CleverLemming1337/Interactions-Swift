@@ -6,7 +6,6 @@
 //
 
 import Foundation
-<<<<<<< HEAD
 
 public class EnvironmentProvider: @unchecked Sendable {
     public static let shared = EnvironmentProvider()
@@ -28,5 +27,3 @@ public class EnvironmentProvider: @unchecked Sendable {
         }
     }
 }
-=======
->>>>>>> d9a840d326835afef9d18fa1213edace4e7aca2a
