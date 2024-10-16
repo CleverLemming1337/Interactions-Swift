@@ -18,6 +18,10 @@ public class EnvironmentProvider: @unchecked Sendable {
     func setSettings(_ settings: AppSettings) {
         self.settings = settings
     }
+    
+    public var dismiss = {
+        AppRenderer.shared.back()
+    }
 }
 
 @propertyWrapper public struct Environment<T> {

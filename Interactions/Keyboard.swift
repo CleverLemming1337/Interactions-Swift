@@ -30,7 +30,7 @@ public func readKey() -> Key {
     guard readBytes > 0 else {
         return .null
     }
-    
+    print(buf)
     if buf[0] == 27 {
         
         let readMore = read(STDIN_FILENO, &buf[1], 2)
@@ -38,7 +38,7 @@ public func readKey() -> Key {
         guard readMore >= 1 else {
             return .null
         }
-
+        print(buf)
         if buf[1] == 91 {
             
             guard readMore == 2 else {
@@ -68,10 +68,6 @@ public func readKey() -> Key {
             }
         }
         if buf[1] == 27 { // ESC
-            guard readMore == 2 else {
-                return .null
-            }
-            
             switch buf[2] {
             case 0: return .escape
             default: return .null

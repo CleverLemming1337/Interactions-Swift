@@ -64,7 +64,9 @@ struct HelloWorld: Interaction {
         Navigation(options: [
             MenuOption(name: "About")
         ])
-        NavigationLink(key: .f1, name: "Help")
+        NavigationLink(key: .f1, name: "Help") {
+            About()
+        }
     }
 }
 

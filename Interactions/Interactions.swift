@@ -73,8 +73,13 @@ public extension App {
         AppRenderer.shared.setScene(self)
         AppRenderer.shared.renderApp()
         
+        @Environment(\.dismiss) var dismiss
+        
         while true {
             let key = readKey() // Hier wird die Taste gelesen
+            if key == .escape {
+                dismiss()
+            }
             KeyBinder.shared.execute(with: key)
         }
         

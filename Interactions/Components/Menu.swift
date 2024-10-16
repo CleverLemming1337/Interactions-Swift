@@ -18,23 +18,22 @@ public struct MenuOption {
 public struct NavigationLink: Interaction {
     let key: Key
     let name: String
+    let destination: any Renderable
     
     @Environment(\.renderer) var renderer
     @Environment(\.settings) var settings
     
     public var body: some Renderable {
         Button(key, name) {
-            renderInteraction {
-                Text("Navigationlink") // TODO: Set new scene
-            }
-            renderer.renderApp()
+            renderer.setScene(destination)
         }
         .tint(settings.accentColor)
     }
     
-    public init(key: Key, name: String) {
+    public init(key: Key, name: String, @InteractionBuilder _ destination: () -> [Renderable]) {
         self.key = key
         self.name = name
+        self.destination = destination()
     }
 }
 public struct Navigation: Interaction {

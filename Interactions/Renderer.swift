@@ -24,7 +24,7 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
     
     private init() {}
     
-    private var scene: (any Scene)?
+    private var navigationPath = [any Renderable]()
 
     var terminalSize: (UInt16, UInt16) {
         get {
@@ -35,12 +35,14 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
             return (0, 0)
         }
     }
-    func setScene(_ scene: (any Scene)?) {
-        self.scene = scene
+    
+    func setScene(_ scene: (any Renderable)) {
+        navigationPath.append(scene)
+        renderApp()
     }
 
     func renderApp() {
-        guard let scene = scene else { return }
+        guard let scene = navigationPath.last else { return }
         
         if !supportsAnsiCodes() {
             fatalError("Your environmennt does not support ANSI escape sequences which are required to use this app. If you are running this app in Xcode, try `swift run` from a terminal.")
@@ -54,7 +56,12 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
         print("\u{001B}[2J\u{001B}[H", terminator: "")
     }
     func showTitle() {
-        print("\u{001B}7\u{001B}[H\u{001B}[7m\(centered: scene?.title ?? "", width: terminalSize.1)\u{1b}[27m\u{1b}8")
+        let title = (navigationPath.last as? (any Scene))?.title
+        print("\u{001B}7\u{001B}[H\u{001B}[7m\(centered: title ?? "", width: terminalSize.1)\u{1b}[27m\u{1b}8")
+    }
+    func back() {
+        _ = navigationPath.popLast()
+        renderApp()
     }
 }
 
