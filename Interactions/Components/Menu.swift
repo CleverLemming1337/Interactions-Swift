@@ -36,6 +36,8 @@ public struct NavigationLink: Interaction {
         self.destination = destination()
     }
 }
+
+@available(*, deprecated, renamed: "NavigationLink", message: "Use NavigationLink instead")
 public struct Navigation: Interaction {
     @Environment(\.keyBinder) var keyBinder
     @Environment(\.renderer) var renderer
