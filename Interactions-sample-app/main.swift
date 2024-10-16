@@ -16,14 +16,16 @@ struct InteractionsSampleApp: App {
 }
 
 struct HelloWorld: Interaction {
+    @Environment(\.renderer) var renderer
+    
     var body: some Renderable {
         RawText("Hello, world!")
         Text("Another text")
             .tint(.red)
         Text("This text is bold")
             .bold()
-        Button(.cA, "Button") {
-            print("Hello")
+        Button(.cA, "Press me with ^A") {
+            print("Button pressed")
         }
     }
 }

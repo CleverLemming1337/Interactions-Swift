@@ -23,10 +23,10 @@ func disableRawMode(original: consuming termios) {
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &original)
 }
 
-public /* TODO: remove `public` */ func readKey() -> UInt8 {
+public /* TODO: remove `public` */ func readKey() -> Key {
     var buf = [CChar](repeating: 0, count: 2)
     read(STDIN_FILENO, &buf, 1)
-    return UInt8(buf[0])
+    return Key(rawValue: UInt8(buf[0])) ?? Key.null
 }
 
 func supportsAnsiCodes() -> Bool {

@@ -67,23 +67,14 @@ public extension App {
         
         while true {
             let key = readKey() // Hier wird die Taste gelesen
-            
-            if key == 27 { // tab
-                AppRenderer.shared.renderApp()
-                
-                
-                
-            }
-            else if key == 10 { // enter
-            }
-            print(key)
+            KeyBinder.shared.execute(with: key)
         }
         
         disableRawMode(original: original)
     }
 }
 
-class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Sendable {
+public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Sendable {
     static let shared = AppRenderer()
     
     private init() {}

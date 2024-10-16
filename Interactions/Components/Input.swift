@@ -52,6 +52,10 @@ public struct Button: Interaction {
         self.key = key
         self.label = label
         self.action = action
+        
+        @Environment(\.keyBinder) var keyBinder
+        
+        keyBinder?.bind(with: key, to: action)
     }
     
     public var body: some Renderable {
@@ -69,6 +73,7 @@ public struct Button: Interaction {
 }
 
 public enum Key: UInt8 {
+    case null = 0
     case cA = 1
     case cB = 2
     case cD = 4
