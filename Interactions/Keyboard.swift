@@ -118,6 +118,7 @@ public enum Key: UInt16 {
     case cX = 24
     case cY = 25
     case cZ = 26
+    
     case n0 = 48
     case n1 = 49
     case n2 = 50
@@ -169,6 +170,17 @@ public let keyNames: [UInt16: String] = [
     24: "^X",
     25: "^Y", // command suspension
     26: "^Z",  // "
+    
+    48: "0",
+    49: "1",
+    50: "2",
+    51: "3",
+    52: "4",
+    53: "5",
+    54: "6",
+    58: "7",
+    59: "8",
+    60: "9",
     
     256: "↑",
     257: "↓",

@@ -36,6 +36,9 @@ public extension Interaction {
     static public func buildEither(second component: Renderable) -> Renderable {
         return component
     }
+    static func buildArray(_ components: [[Renderable]]) -> [Renderable] {
+        return components.flatMap { $0 }
+    }
 }
 
 extension [Renderable]: Renderable {
@@ -53,8 +56,13 @@ public struct Group: Renderable {
     
 }
 
-public protocol App: Interaction {
+public protocol Scene: Interaction {
+    var title: String { get }
+}
+
+public protocol App: Scene {
     func run()
+    var settings: AppSettings { get }
 }
 
 public extension App {
@@ -62,7 +70,7 @@ public extension App {
         print("Initializing app...")
         let original = enableRawMode()
         AppRenderer.shared.clearScreen()
-        AppRenderer.shared.setApp(self)
+        AppRenderer.shared.setScene(self)
         AppRenderer.shared.renderApp()
         
         while true {
@@ -74,30 +82,23 @@ public extension App {
     }
 }
 
-public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Sendable {
-    static let shared = AppRenderer()
+public struct AppSettings {
+    public let name: String
+    public let version: String
+    public let accentColor: Color
     
-    private init() {}
-    
-    private var app: (any App)?
-
-    func setApp(_ app: (any App)?) {
-        self.app = app
-    }
-
-    func renderApp() {
-        guard let app = app else { return }
+    public init(name: String = "Interactions app", version: String = "0.0.0", accentColor: Color = .cyan, set: Bool = true) {
+        self.name = name
+        self.version = version
+        self.accentColor = accentColor
         
-        if !supportsAnsiCodes() {
-            fatalError("Your environmennt does not support ANSI escape sequences which are required to use this app.")
+        if set {
+            EnvironmentProvider.shared.setSettings(self)
         }
-        clearScreen()
-        print(app.render())
-    }
-    func clearScreen() {
-        print("\u{001B}[2J\u{001B}[H", terminator: "")
     }
 }
+
+
 
 public class StateStorage: @unchecked Sendable {
     static let shared = StateStorage()

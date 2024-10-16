@@ -43,7 +43,7 @@ import Foundation
 //    }
 //}
 
-public struct Button: Interaction {
+public struct Button: Interaction, Formattable {
     let key: Key
     let label: String
     let action: () -> Void
@@ -55,7 +55,7 @@ public struct Button: Interaction {
         
         @Environment(\.keyBinder) var keyBinder
         
-        keyBinder?.bind(with: key, to: action)
+        keyBinder.bind(with: key, to: action)
     }
     
     public var body: some Renderable {

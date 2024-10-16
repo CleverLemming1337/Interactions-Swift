@@ -21,4 +21,8 @@ public class KeyBinder: @unchecked Sendable {
             closure()
         }
     }
+    
+    public func unbind(key: Key) {
+        bindings.removeValue(forKey: key)
+    }
 }

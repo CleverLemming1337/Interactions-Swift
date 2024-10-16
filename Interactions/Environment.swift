@@ -13,6 +13,11 @@ public class EnvironmentProvider: @unchecked Sendable {
     public let renderer = AppRenderer.shared
     public let keyBinder = KeyBinder.shared
     public let logger = Logger.shared
+    public private(set) var settings: AppSettings = AppSettings(set: false)
+    
+    func setSettings(_ settings: AppSettings) {
+        self.settings = settings
+    }
 }
 
 @propertyWrapper public struct Environment<T> {
@@ -22,7 +27,7 @@ public class EnvironmentProvider: @unchecked Sendable {
         self.path = path
     }
     
-    public var wrappedValue: T? {
+    public var wrappedValue: T {
         get {
             return EnvironmentProvider.shared[keyPath: path]
         }
