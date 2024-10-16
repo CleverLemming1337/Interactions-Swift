@@ -7,25 +7,23 @@ let package = Package(
         .macOS(.v13)
     ],
     products: [
-        .library( // Das Framework, das extern importiert werden kann
-            name: "Interactions", // Name des Frameworks
+        .library(
+            name: "Interactions",
             targets: ["Interactions"]
         ),
     ],
-    dependencies: [
-        // Füge hier Abhängigkeiten hinzu, falls erforderlich
-    ],
+    dependencies: [],
     targets: [
         .target(
-            name: "Interactions", // Name des Framework-Targets
-            dependencies: [], // Abhängigkeiten des Frameworks
+            name: "Interactions",
+            dependencies: [],
             path: "Interactions"
         ),
         .testTarget(
             name: "InteractionsTests",
             dependencies: ["Interactions"]
         ),
-        .executableTarget( // Demo-App
+        .executableTarget(
             name: "Interactions-sample-app",
             dependencies: ["Interactions"],
             path: "Interactions-sample-app"

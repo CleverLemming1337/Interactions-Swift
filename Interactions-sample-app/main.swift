@@ -18,10 +18,26 @@ struct InteractionsSampleApp: App {
 struct HelloWorld: Interaction {
     var body: some Renderable {
         RawText("Hello, world!")
-        RawText("Another text")
+        Text("Another text")
+            .tint(.red)
         Text("This text is bold")
             .bold()
+        Button(.cA, "Button") {
+            print("Hello")
+        }
     }
 }
+
+
+
+struct MyComponent: Interaction {
+    private var state = StateItem(0)
+    
+    var body: some Renderable {
+        Text(String(state.value))
+    }
+}
+
+
 
 InteractionsSampleApp().run()
