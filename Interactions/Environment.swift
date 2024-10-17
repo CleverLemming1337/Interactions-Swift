@@ -14,6 +14,11 @@ public class EnvironmentProvider: @unchecked Sendable {
     public let keyBinder = KeyBinder.shared
     public let logger = Logger.shared
     public private(set) var settings: AppSettings = AppSettings(set: false)
+    public var terminalSize: (UInt16, UInt16) {
+        get {
+            AppRenderer.shared.terminalSize
+        }
+    }
     
     func setSettings(_ settings: AppSettings) {
         self.settings = settings

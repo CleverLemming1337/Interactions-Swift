@@ -29,6 +29,9 @@ struct About: Scene {
     
     var body: some Renderable {
         Text("Version \(settings.version)")
+        Overlay(x: 10, y: 10) {
+            Text("This is an absolute positioned overlay.")
+        }
     }
 }
 
@@ -47,6 +50,7 @@ struct Counter: Scene {
 
 struct HelloWorld: Interaction {
     @Environment(\.logger) var logger
+    @Environment(\.terminalSize) var terminalSize
     @Environment(\.settings) var settings
     
     var body: some Renderable {
@@ -77,6 +81,7 @@ struct HelloWorld: Interaction {
         NavigationLink(key: .n1, name: "State demo") {
             Counter()
         }
+        Text(wrapLinesByWords(text: "That’s pretty cool, but where key paths really start to shine is when they’re used to form slightly more complex expressions, such as when sorting a sequence of values.", width: terminalSize.0))
     }
 }
 

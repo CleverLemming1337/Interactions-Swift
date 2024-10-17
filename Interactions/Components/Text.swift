@@ -94,3 +94,65 @@ public struct HStack: Interaction, Formattable {
         self.spacing = spacing
     }
 }
+
+func wrapLine(line: String, width: UInt16) -> [String] {
+    if line.trimmingCharacters(in: .whitespacesAndNewlines).count <= width {
+        return [line.trimmingCharacters(in: .whitespacesAndNewlines)]
+    }
+    var lines = [String]()
+    lines.append(String(line.prefix(Int(width))))
+    lines.append(contentsOf: wrapLine(line: String(line.suffix(line.count-Int(width))), width: width))
+    
+    return lines
+}
+
+public func wrapLines(text: String, width: UInt16) -> String {
+    let lines = text.split(separator: "\n")
+    var result = [String]()
+    
+    for line in lines {
+        result.append(contentsOf: wrapLine(line: String(line), width: width))
+    }
+    return result.joined(separator: "\n")
+}
+
+func wrapLineByWords(line: String, width: UInt16) -> [String] {
+    if line.trimmingCharacters(in: .whitespaces).count < width {
+        return [line.trimmingCharacters(in: .whitespacesAndNewlines)]
+    }
+    
+    let words = line.split(separator: " ")
+    var result = [String]()
+    var newLine = ""
+    for word in words {
+        
+        print(newLine)
+        if newLine == "" {
+            newLine = String(word)
+            continue
+        }
+        if word.count > width {
+            result.append(contentsOf: wrapLine(line: String(word), width: width))
+            continue
+        }
+        if (newLine+" "+word).count > width {
+            result.append(newLine)
+            newLine = String(word)
+            continue
+        }
+        newLine += " "+word
+    }
+    result.append(newLine)
+    return result
+}
+
+public func wrapLinesByWords(text: String, width: UInt16) -> String {
+    let lines = text.split(separator: "\n")
+    var result = [String]()
+    
+    for line in lines {
+        result.append(contentsOf: wrapLineByWords(line: String(line), width: width))
+    }
+    
+    return result.joined(separator: "\n")
+}

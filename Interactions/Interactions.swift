@@ -22,6 +22,17 @@ public extension Interaction {
     }
 }
 
+public protocol AbsolutePosition: Interaction {
+    var x: UInt16 { get }
+    var y: UInt16 { get }
+}
+
+public extension AbsolutePosition {
+    func render() -> String {
+        return "\u{1b}7\u{1b}[\(y);\(x)H" + self.body.render() + "\u{1b}8"
+    }
+}
+
 @resultBuilder public struct InteractionBuilder {
     static public func buildBlock(_ components: Renderable...) -> [Renderable] {
         return components
