@@ -9,12 +9,12 @@ import Foundation
 import Darwin
 
 extension String.StringInterpolation {
-    mutating func appendInterpolation(centered text: String, width: UInt16) {
+    mutating func appendInterpolation(centered text: String, width: UInt16, filling: Character = " ") {
         let padding = max(0, Int(width) - text.count)
         let leftPadding = padding / 2
         let rightPadding = padding - leftPadding
 
-        let centeredText = String(repeating: " ", count: leftPadding) + text + String(repeating: " ", count: rightPadding)
+        let centeredText = String(repeating: filling, count: leftPadding) + text + String(repeating: filling, count: rightPadding)
         appendLiteral(centeredText)
     }
     mutating func appendInterpolation(_ text: String, width: UInt16) {

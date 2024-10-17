@@ -29,9 +29,7 @@ struct About: Scene {
     
     var body: some Renderable {
         Text("Version \(settings.version)")
-        Overlay(x: 10, y: 10) {
-            Text("This is an absolute positioned overlay.")
-        }
+        Alert(title: "Test", text: "That’s pretty cool, but where key paths really start to shine is when they’re used to form slightly more complex expressions, such as when sorting a sequence of values.", level: .info)
     }
 }
 

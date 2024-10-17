@@ -125,8 +125,6 @@ func wrapLineByWords(line: String, width: UInt16) -> [String] {
     var result = [String]()
     var newLine = ""
     for word in words {
-        
-        print(newLine)
         if newLine == "" {
             newLine = String(word)
             continue

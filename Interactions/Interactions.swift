@@ -50,6 +50,17 @@ public extension AbsolutePosition {
     static func buildArray(_ components: [[Renderable]]) -> [Renderable] {
         return components.flatMap { $0 }
     }
+    static public func buildOptional(_ component: [Renderable]?) -> [Renderable] {
+        return component ?? []
+    }
+        
+    static public func buildEither(first component: [Renderable]) -> [Renderable] {
+        return component
+    }
+
+    static public func buildEither(second component: [Renderable]) -> [Renderable] {
+        return component
+    }
 }
 
 extension [Renderable]: Renderable {
