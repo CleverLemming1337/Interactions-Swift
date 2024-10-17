@@ -80,7 +80,12 @@ public extension App {
             if key == .escape {
                 dismiss()
             }
-            KeyBinder.shared.execute(with: key)
+            else if key == .cL {
+                AppRenderer.shared.setScene(LogList())
+            }
+            else {
+                KeyBinder.shared.execute(with: key)
+            }
         }
         
         disableRawMode(original: original)

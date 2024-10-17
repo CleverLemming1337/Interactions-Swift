@@ -13,6 +13,18 @@ public enum LogLevel {
     case warning
     case error
     case fatal
+    
+    var color: Color {
+        get {
+            switch self {
+            case .debug: return .white
+            case .info: return .cyan
+            case .warning: return .yellow
+            case .error: return .red
+            case .fatal: return .red
+            }
+        }
+    }
 }
 
 public struct Log: CustomStringConvertible {
@@ -30,6 +42,8 @@ public struct Log: CustomStringConvertible {
         self.level = level
         self.message = message
     }
+    
+    
 }
 
 public class Logger: @unchecked Sendable {
@@ -37,13 +51,30 @@ public class Logger: @unchecked Sendable {
     
     public var logs = [Log]()
     
-    public func printLogs() {
-        for log in logs {
-            print(log)
-        }
-    }
-    
     public func log(_ log: Log) {
         logs.append(log)
+    }
+}
+
+struct RenderedLog: Interaction {
+    let log: Log
+    
+    public var body: some Renderable {
+        HStack {
+            Text(log.date.description)
+            Text("[\("\(centered: "\(log.level)", width: 7)".uppercased())]")
+            Text(log.message)
+        }
+        .tint(log.level.color)
+    }
+}
+struct LogList: Scene {
+    @Environment(\.logger) var logger
+    let title = "Log"
+    
+    var body: some Renderable {
+        for log in logger.logs {
+            RenderedLog(log: log)
+        }
     }
 }

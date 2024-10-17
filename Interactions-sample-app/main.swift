@@ -64,9 +64,6 @@ struct HelloWorld: Interaction {
             let log = Log(level: .info, message: "This is an info message")
             logger.log(log)
         }
-        Button(.cD, "Show log") {
-            logger.printLogs()
-        }
         Button(.arrowUp, "Try keys") {
             var key = Key.null
             repeat {

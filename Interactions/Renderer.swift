@@ -17,6 +17,11 @@ extension String.StringInterpolation {
         let centeredText = String(repeating: " ", count: leftPadding) + text + String(repeating: " ", count: rightPadding)
         appendLiteral(centeredText)
     }
+    mutating func appendInterpolation(_ text: String, width: UInt16) {
+        let paddingR = max(0, Int(width) - text.count)
+        
+        appendLiteral(text+String(repeating: " ", count: paddingR))
+    }
 }
 
 public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Sendable {
@@ -30,13 +35,14 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
         get {
             var w = winsize()
             if ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 {
-                return (w.ws_row, w.ws_col)
+                return (w.ws_col, w.ws_row)
             }
             return (0, 0)
         }
     }
     
     func setScene(_ scene: (any Renderable)) {
+        KeyBinder.shared.unbindAll()
         navigationPath.append(scene)
         renderApp()
     }
@@ -48,16 +54,21 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
             fatalError("Your environmennt does not support ANSI escape sequences which are required to use this app. If you are running this app in Xcode, try `swift run` from a terminal.")
         }
         clearScreen()
-        print("\n")
+        print("\n\n")
         print(scene.render())
         showTitle()
+        showSubHeader()
     }
     func clearScreen() {
         print("\u{001B}[2J\u{001B}[H", terminator: "")
     }
     func showTitle() {
         let title = (navigationPath.last as? (any Scene))?.title
-        print("\u{001B}7\u{001B}[H\u{001B}[7m\(centered: title ?? "", width: terminalSize.1)\u{1b}[27m\u{1b}8")
+        print("\u{001B}7\u{001B}[H\u{001B}[7m\(navigationPath.count > 1 ? " < ESC" : "")\(centered: title ?? "", width: terminalSize.0-(navigationPath.count > 1 ? 12 : 0))\(navigationPath.count > 1 ? "      " : "")\u{1b}[27m\u{1b}8")
+    }
+    func showSubHeader() {
+        print("\("\u{1b}7\u{1b}[2;0H\u{1b}[100m \u{1b}[1m^L\u{1b}[22m Show log\t\u{1b}[1mF1\u{1b}[22m Help", width: terminalSize.0+29)\u{1b}[0m\u{1b}8")
+        return
     }
     func back() {
         _ = navigationPath.popLast()

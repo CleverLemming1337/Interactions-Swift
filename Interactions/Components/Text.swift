@@ -74,7 +74,7 @@ public struct Text: Interaction, Formattable {
     }
 }
 
-public struct HStack: Interaction {
+public struct HStack: Interaction, Formattable {
     let elements: [Renderable]
     let spacing: Int
 
