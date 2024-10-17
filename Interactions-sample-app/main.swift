@@ -81,7 +81,6 @@ struct HelloWorld: Interaction {
         NavigationLink(key: .n1, name: "State demo") {
             Counter()
         }
-        Text(wrapLinesByWords(text: "That’s pretty cool, but where key paths really start to shine is when they’re used to form slightly more complex expressions, such as when sorting a sequence of values.", width: terminalSize.0))
     }
 }
 
