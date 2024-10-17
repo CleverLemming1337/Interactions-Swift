@@ -71,7 +71,7 @@ struct HelloWorld: Interaction {
                 print(key.toString(), key.rawValue)
             } while key != .enter
         }
-        NavigationLink(key: .f1, name: "Help") {
+        NavigationLink(key: .f1, name: "About", title: "About this app") {
             About()
         }
         NavigationLink(key: .n1, name: "State demo") {

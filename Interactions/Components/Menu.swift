@@ -19,20 +19,22 @@ public struct NavigationLink: Interaction {
     let key: Key
     let name: String
     let destination: any Renderable
+    let title: String
     
     @Environment(\.renderer) var renderer
     @Environment(\.settings) var settings
     
     public var body: some Renderable {
         Button(key, name) {
-            renderer.setScene(destination)
+            renderer.setScene(destination, title: title)
         }
         .tint(settings.accentColor)
     }
     
-    public init(key: Key, name: String, @InteractionBuilder _ destination: () -> [Renderable]) {
+    public init(key: Key, name: String, title: String = "", @InteractionBuilder _ destination: () -> [Renderable]) {
         self.key = key
         self.name = name
+        self.title = title
         self.destination = destination()
     }
 }
