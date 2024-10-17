@@ -29,7 +29,7 @@ struct About: Scene {
     
     var body: some Renderable {
         Text("Version \(settings.version)")
-        Alert(title: "Test", text: "That’s pretty cool, but where key paths really start to shine is when they’re used to form slightly more complex expressions, such as when sorting a sequence of values.", level: .info)
+        
     }
 }
 
@@ -43,14 +43,28 @@ struct Counter: Scene {
         Button(Key.cA, "Count up") {
             count.value += 1
         }
+        
     }
 }
 
+struct AlertDemo: Scene {
+    let title = "Alert demo"
+    let showAlert = StateItem(false)
+    var body: some Renderable {
+        Button(.cD, "Show alert") {
+            showAlert.value = true
+        }
+        Text("This text will be behind the alert.")
+        Alert(title: "Alert title", text: "Here’s to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They’re not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. But the only thing you can’t do is ignore them. Because they change things. They push the human race forward. And while some may see them as the crazy ones, We see genius. Because the people who are crazy enough to think they can change the world, Are the ones who do.", level: .info, isPresented: showAlert)
+        
+    }
+}
 struct HelloWorld: Interaction {
     @Environment(\.logger) var logger
     @Environment(\.terminalSize) var terminalSize
     @Environment(\.settings) var settings
     
+
     var body: some Renderable {
         RawText("Hello, world!")
         Text("Another text")
@@ -79,6 +93,10 @@ struct HelloWorld: Interaction {
         NavigationLink(key: .n1, name: "State demo") {
             Counter()
         }
+        NavigationLink(key: .n2, name: "Alert demo", title: "Alert demo") {
+            AlertDemo()
+        }
+        
     }
 }
 

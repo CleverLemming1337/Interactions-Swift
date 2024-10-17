@@ -48,6 +48,9 @@ public extension Formattable {
     func other(_ start: String, end: String = "[0m") -> Formattable {
         return Text("\u{001B}\(start)\(self.render())\u{001B}\(end)")
     }
+    func centered(width: UInt16) -> Formattable {
+        return Text("\(centered: self.render(), width: width)")
+    }
 }
 
 public enum Color: UInt8 {

@@ -47,25 +47,39 @@ public struct Alert: AbsolutePosition {
     let title: String
     let text: String
     let level: LogLevel
+    let isPresented: StateItem<Bool>?
     
     public var body: some Renderable {
-        Overlay(x: x, y: y) {
-            Text("╭\(centered: " "+title+" ", width: width, filling: "─")╮")
+        if isPresented == nil || isPresented!.value {
+            Overlay(x: x, y: y) {
+                Text("\u{1b}[3\(level.color.rawValue)m╭\(centered: " \(level): ".uppercased()+title+" ", width: width, filling: "─")╮")
+                    .padding(2)
+                Text("│\u{1b}[39m\(String(repeating: " ", count: Int(width)))\u{1b}[3\(level.color.rawValue)m│")
+                    .padding(2)
+                for line in wrapLinesByWords(text: text, width: width-2).split(separator: "\n") {
+                    Text("│\u{1b}[39m \(centered: String(line), width: width-2) \u{1b}[3\(level.color.rawValue)m│")
+                        .padding(2)
+                }
+                Text("│\(String(repeating: " ", count: Int(width)))│")
+                    .padding(2)
+                HStack {
+                    Text("│\u{1b}[39m")
+                    Button(.enter, "OK", showShortcut: false) {
+                        isPresented?.value = false
+                    }
+                    .centered(width: width+7)
+                    Text("\u{1b}[3\(level.color.rawValue)m│")
+                }
                 .padding(2)
-            Text("│\(String(repeating: " ", count: Int(width)))│")
-                .padding(2)
-            for line in wrapLinesByWords(text: text, width: width-2).split(separator: "\n") {
-                Text("│ \(centered: String(line), width: width-2) │")
+                Text("│\(String(repeating: " ", count: Int(width)))│")
+                    .padding(2)
+                Text("╰\(String(repeating: "─", count: Int(width)))╯\u{1b}[39m")
                     .padding(2)
             }
-            Text("│\(String(repeating: " ", count: Int(width)))│")
-                .padding(2)
-            Text("╰\(String(repeating: "─", count: Int(width)))╯")
-                .padding(2)
         }
     }
     
-    public init(title: String, text: String, level: LogLevel) {
+    public init(title: String, text: String, level: LogLevel, isPresented: StateItem<Bool>? = nil) {
         @Environment(\.terminalSize) var terminalSize
         self.x = 5
         self.y = 5
@@ -73,5 +87,6 @@ public struct Alert: AbsolutePosition {
         self.title = title
         self.text = text
         self.level = level
+        self.isPresented = isPresented
     }
 }

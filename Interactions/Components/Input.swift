@@ -47,11 +47,13 @@ public struct Button: Interaction, Formattable {
     let key: Key
     let label: String
     let action: () -> Void
+    let showShortcut: Bool
     
-    public init(_ key: Key, _ label: String, _ action: @escaping () -> Void) {
+    public init(_ key: Key, _ label: String, showShortcut: Bool = true, _ action: @escaping () -> Void) {
         self.key = key
         self.label = label
         self.action = action
+        self.showShortcut = showShortcut
         
         @Environment(\.keyBinder) var keyBinder
         
@@ -60,10 +62,11 @@ public struct Button: Interaction, Formattable {
     
     public var body: some Renderable {
         HStack(spacing: 0) {
-            Text(key.toString())
-                .padding()
-                .other("[100m", end: "[49m")
-                
+            if showShortcut {
+                Text(key.toString())
+                    .padding()
+                    .other("[100m", end: "[49m")
+            }
             Text("\(label)")
                 .padding()
                 .reversed()
