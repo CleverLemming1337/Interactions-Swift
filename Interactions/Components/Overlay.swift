@@ -62,15 +62,17 @@ public struct Alert: AbsolutePosition {
                 }
                 Text("│\(String(repeating: " ", count: Int(width)))│")
                     .padding(2)
-                HStack {
-                    Text("│\u{1b}[39m")
-                    Button(.enter, "OK", showShortcut: false) {
-                        isPresented?.value = false
+                if isPresented != nil {
+                    HStack {
+                        Text("│\u{1b}[39m")
+                        Button(.enter, "OK", showShortcut: false) {
+                            isPresented?.value = false
+                        }
+                        .centered(width: width+7)
+                        Text("\u{1b}[3\(level.color.rawValue)m│")
                     }
-                    .centered(width: width+7)
-                    Text("\u{1b}[3\(level.color.rawValue)m│")
+                    .padding(2)
                 }
-                .padding(2)
                 Text("│\(String(repeating: " ", count: Int(width)))│")
                     .padding(2)
                 Text("╰\(String(repeating: "─", count: Int(width)))╯\u{1b}[39m")
