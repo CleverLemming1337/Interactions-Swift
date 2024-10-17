@@ -18,3 +18,18 @@ public class StateItem<T> {
         self.value = value
     }
 }
+
+@propertyWrapper public struct State<T> {
+    let stateitem: StateItem<T>
+    public init(wrappedValue: T) {
+        self.stateitem = StateItem<T>(wrappedValue)
+    }
+    public var wrappedValue: T {
+        get {
+            stateitem.value
+        }
+        set {
+            stateitem.value = newValue
+        }
+    }
+}
