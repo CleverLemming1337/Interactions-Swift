@@ -74,9 +74,6 @@ struct HelloWorld: Interaction {
                 print(key.toString(), key.rawValue)
             } while key != .enter
         }
-        Navigation(options: [
-            MenuOption(name: "About")
-        ])
         NavigationLink(key: .f1, name: "Help") {
             About()
         }

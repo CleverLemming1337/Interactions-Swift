@@ -109,22 +109,3 @@ public class StateStorage: @unchecked Sendable {
     static let shared = StateStorage()
     public var storage = [UUID: Any]()
 }
-
-@propertyWrapper
-public struct State<T> {
-    let id = UUID()
-    
-    public init(wrappedValue: T) {
-        StateStorage.shared.storage[id] = wrappedValue
-    }
-    
-    public var wrappedValue: T {
-        get {
-            return StateStorage.shared.storage[id] as! T
-        }
-        set {
-            StateStorage.shared.storage[id] = newValue
-            AppRenderer.shared.renderApp()
-        }
-    }
-}
