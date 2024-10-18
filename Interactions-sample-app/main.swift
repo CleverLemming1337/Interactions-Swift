@@ -10,7 +10,7 @@ import Interactions
 
 
 struct InteractionsSampleApp: App {
-    var title = "Welcome!"
+    let title = "Welcome!"
     
     let settings = AppSettings(
         name: "Interactions Sample App",
@@ -112,4 +112,31 @@ struct MyComponent: Interaction {
 
 
 
-InteractionsSampleApp().run()
+struct MyApp: App {
+    let title = "Hello, World!"
+
+    let settings = AppSettings(
+        name: "My first Interactions app",
+        accentColor: .green
+    )
+
+    var body: some Renderable {
+        Text("Hello, world!")
+        Button(.cA, "Press me!") {
+            print("Hurray!")
+        }
+        NavigationLink(key: .n1, name: "Press me to navigate", title: "Second scene") {
+            SecondScene()
+        }
+    }
+}
+
+struct SecondScene: Scene {
+    let title = "Second scene"
+
+    var body: some Renderable {
+        SwiftLogo()
+    }
+}
+
+MyApp().run()

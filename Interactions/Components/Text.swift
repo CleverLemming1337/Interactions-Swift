@@ -34,10 +34,10 @@ public extension Formattable {
         return Text("\u{001B}[7m\(self.render())\u{001B}[27m")
     }
     func tint(_ color: Color = EnvironmentProvider.shared.settings.accentColor) -> Formattable {
-        return Text("\u{001B}[3\(color.rawValue)m\(self.render())\u{001B}[39m")
+        return Text("\u{001B}[3\(color.value)m\(self.render())\u{001B}[39m")
     }
     func background(_ color: Color) -> Formattable {
-        return Text("\u{001B}[4\(color.rawValue)m\(self.render())\u{001B}[49m")
+        return Text("\u{001B}[4\(color.value)m\(self.render())\u{001B}[49m")
     }
     func padding(_ x: UInt = 1, _ y: UInt = 0) -> Formattable {
         return Text("\(String(repeating: " ", count: Int(x)))\(self.render())\(String(repeating: " ", count: Int(x)))")
@@ -53,15 +53,37 @@ public extension Formattable {
     }
 }
 
-public enum Color: UInt8 {
-    case black = 0
-    case red = 1
-    case green = 2
-    case yellow = 3
-    case blue = 4
-    case magenta = 5
-    case cyan = 6
-    case white = 7
+public enum Color {
+    case black
+    case red
+    case green
+    case yellow
+    case blue
+    case magenta
+    case cyan
+    case white
+    case color256(_ number: UInt8)
+    case rgb(_ red: UInt8, _ green: UInt8, _ blue: UInt8)
+    
+    /// Returns the ANSI value of the color as string
+    /// Example: red is `\u{1b}[31m`
+    /// `.red.value` would return `"1"` (part between `3` and `m`
+    var value: String {
+        get {
+            switch self {
+            case .black: return "0"
+            case .red: return "1"
+            case .green: return "2"
+            case .yellow: return "3"
+            case .blue: return "4"
+            case .magenta: return "5"
+            case .cyan: return "6"
+            case .white: return "7"
+            case let .color256(number): return "8;5;\(number)"
+            case let .rgb(r, g, b): return "8;2;\(r);\(g);\(b)"
+            }
+        }
+    }
 }
 
 public struct Text: Interaction, Formattable {
@@ -98,6 +120,26 @@ public struct HStack: Interaction, Formattable {
     }
 }
 
+public struct VStack: Interaction, Formattable {
+    let elements: [Renderable]
+    let spacing: Int
+    
+    public var body: some Renderable {
+        var result = ""
+        for (index, element) in elements.enumerated() {
+            result += element.render() + "\n"
+            if index < elements.count - 1 {
+                result += String(repeating: "\n", count: spacing)
+            }
+        }
+        return RawText(result)
+    }
+    
+    public init(spacing: Int = 1, @InteractionBuilder _ content: () -> [Renderable]) {
+        self.elements = content()
+        self.spacing = spacing
+    }
+}
 func wrapLine(line: String, width: UInt16) -> [String] {
     if line.trimmingCharacters(in: .whitespacesAndNewlines).count <= width {
         return [line.trimmingCharacters(in: .whitespacesAndNewlines)]
