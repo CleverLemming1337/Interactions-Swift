@@ -40,7 +40,7 @@ public struct Overlay: Interaction {
     }
 }
 
-public struct Alert: AbsolutePosition {
+public struct Alert: Interaction {
     public let x: UInt16
     public let y: UInt16
     let width: UInt16
