@@ -35,15 +35,24 @@ struct About: Scene {
 
 struct Counter: Scene {
     let count = StateItem(0)
+    let text = StateItem("")
     
     let title = "State demo"
     
     var body: some Renderable {
-        Text("Counter is at \(count.value)")
-        Button(Key.cA, "Count up") {
-            count.value += 1
+        VStack {
+            Text("Counter is at \(count.value)")
+            Button(Key.cA, "Count up") {
+                count.value += 1
+            }
+            TextField(.n1, "Your name", placeholder: "Enter your name...", text: text)
+            if text.value != "" {
+                Text("Hello, \(text.value)!")
+            }
+            else {
+                Text("Press 1 to enter your name")
+            }
         }
-        
     }
 }
 
@@ -84,8 +93,8 @@ struct HelloWorld: Interaction {
             var key = Key.null
             repeat {
                 key = readKey()
-                print(key.toString(), key.rawValue)
-            } while key != .enter
+                print(key.name, key.rawValue)
+            } while key != .newLine
         }
         NavigationLink(key: .f1, name: "About", title: "About this app") {
             About()
@@ -139,4 +148,4 @@ struct SecondScene: Scene {
     }
 }
 
-MyApp().run()
+InteractionsSampleApp().run()

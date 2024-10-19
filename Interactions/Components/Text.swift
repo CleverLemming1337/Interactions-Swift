@@ -62,6 +62,7 @@ public enum Color {
     case magenta
     case cyan
     case white
+    case normal
     case color256(_ number: UInt8)
     case rgb(_ red: UInt8, _ green: UInt8, _ blue: UInt8)
     
@@ -79,6 +80,7 @@ public enum Color {
             case .magenta: return "5"
             case .cyan: return "6"
             case .white: return "7"
+            case .normal: return "9"
             case let .color256(number): return "8;5;\(number)"
             case let .rgb(r, g, b): return "8;2;\(r);\(g);\(b)"
             }

@@ -2,7 +2,7 @@
 //  Renderer.swift
 //  Interactions
 //
-//  Created by Leonard on 16.10.24.
+//  Created by CleverLemming1337 on 16.10.24.
 //
 
 import Foundation
@@ -68,12 +68,23 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
         print("\u{001B}7\u{001B}[H\u{001B}[7m\(navigationPath.count > 1 ? " < ESC" : "")\(centered: title, width: terminalSize.0-(navigationPath.count > 1 ? 12 : 0))\(navigationPath.count > 1 ? "      " : "")\u{1b}[27m\u{1b}8")
     }
     func showSubHeader() {
-        print("\("\u{1b}7\u{1b}[2;0H\u{1b}[100m \u{1b}[1m^L\u{1b}[22m Show log\t\u{1b}[1mF1\u{1b}[22m Help", width: terminalSize.0+29)\u{1b}[0m\u{1b}8")
+        print("\("\u{1b}7\u{1b}[2;0H\u{1b}[100m \u{1b}[1m^L\u{1b}[22m Show log    \u{1b}[1mF1\u{1b}[22m Help    \u{1b}[1m^X\u{1b}[22m Exit", width: terminalSize.0+41)\u{1b}[0m\u{1b}8")
         return
     }
     func back() {
         _ = navigationPath.popLast()
         renderApp()
+    }
+    func moveCursor(to position: (row: UInt16, col: UInt16)) {
+        print("\u{1b}[\(position.col);\(position.row)H", terminator: "")
+    }
+    func hideCursor() {
+        print("\u{1b}[?25l", terminator: "")
+        fflush(stdout)
+    }
+    func showCursor() {
+        print("\u{1b}[?25h", terminator: "")
+        fflush(stdout)
     }
 }
 

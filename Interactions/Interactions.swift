@@ -98,6 +98,13 @@ public extension App {
     func run() {
         print("Initializing app...")
         let original = enableRawMode()
+        AppRenderer.shared.hideCursor()
+        
+        defer {
+            disableRawMode(original: original)
+            AppRenderer.shared.showCursor()
+        }
+        
         AppRenderer.shared.clearScreen()
         AppRenderer.shared.setScene(self)
         AppRenderer.shared.renderApp()
@@ -112,12 +119,13 @@ public extension App {
             else if key == .cL {
                 AppRenderer.shared.setScene(LogList())
             }
+            else if key == .cX {
+                break
+            }
             else {
                 KeyBinder.shared.execute(with: key)
             }
         }
-        
-        disableRawMode(original: original)
     }
 }
 

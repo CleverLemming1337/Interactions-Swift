@@ -2,7 +2,7 @@
 //  Overlay.swift
 //  Interactions
 //
-//  Created by Leonard on 17.10.24.
+//  Created by CleverLemming1337 on 17.10.24.
 //
 
 import Foundation
@@ -28,7 +28,7 @@ public struct Overlay: Interaction {
     
     func unpackComponents(components: [Renderable]) -> [Renderable] {
         var result = [Renderable]()
-        for (index, component) in components.enumerated() {
+        for component in components {
             if let componentGroup = component as? [Renderable] {
                 result.append(contentsOf: unpackComponents(components: componentGroup))
             }
@@ -65,7 +65,7 @@ public struct Alert: Interaction {
                 if isPresented != nil {
                     HStack {
                         Text("│\u{1b}[39m")
-                        Button(.enter, "OK", showShortcut: false) {
+                        Button(.newLine, "OK", showShortcut: false) {
                             isPresented?.value = false
                         }
                         .centered(width: width+7)

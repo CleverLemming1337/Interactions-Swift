@@ -2,7 +2,7 @@
 //  State.swift
 //  Interactions
 //
-//  Created by Leonard on 15.10.24.
+//  Created by CleverLemming1337 on 15.10.24.
 //
 
 import Foundation

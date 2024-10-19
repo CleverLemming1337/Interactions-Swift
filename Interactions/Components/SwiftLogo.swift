@@ -2,7 +2,7 @@
 //  SwiftLogo.swift
 //  Interactions
 //
-//  Created by Leonard on 18.10.24.
+//  Created by CleverLemming1337 on 18.10.24.
 //
 
 import Foundation
