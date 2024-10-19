@@ -31,7 +31,6 @@ func disableRawMode(original: consuming termios) {
         return .null
     }
     
-    print(buf)
     if buf[0] == 27 {
         let readMore = read(STDIN_FILENO, &buf[1], 2)
         
