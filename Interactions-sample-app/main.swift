@@ -96,16 +96,9 @@ struct HelloWorld: Interaction {
                 print(key.name, key.rawValue)
             } while key != .newLine
         }
-        NavigationLink(key: .f1, name: "About", title: "About this app") {
-            About()
-        }
-        NavigationLink(key: .n1, name: "State demo") {
-            Counter()
-        }
-        NavigationLink(key: .n2, name: "Alert demo", title: "Alert demo") {
-            AlertDemo()
-        }
-        
+        NavigationLink(key: .f1, label: "About", destination: About())
+        NavigationLink(key: .n1, label: "State demo", destination: Counter())
+        NavigationLink(key: .n2, label: "Alert demo", destination: AlertDemo())
     }
 }
 
@@ -134,9 +127,7 @@ struct MyApp: App {
         Button(.cA, "Press me!") {
             print("Hurray!")
         }
-        NavigationLink(key: .n1, name: "Press me to navigate", title: "Second scene") {
-            SecondScene()
-        }
+        NavigationLink(key: .n1, label: "Press me to navigate", destination: SecondScene())
     }
 }
 
