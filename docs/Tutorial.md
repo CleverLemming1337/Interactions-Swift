@@ -59,15 +59,13 @@ Let's add a button to your app:
 var body: some Renderable {
     ...
     Button(.cA, "Press me!") {
-        print("Hurray!")
+        print("Hoorray!")
     }
     ...
 }
 ```
 
 Run the app with `swift run` again and press ctrl+a.
-
-<img width="682" alt="Bildschirmfoto 2024-10-18 um 11 23 54" src="https://github.com/user-attachments/assets/d3101dde-9834-4ccd-bd64-83b59e3d8844">
 
 The first argument `.cA` is the key used to press the button if you type `Button(.` in Xcode, you should see some available keys.
 
