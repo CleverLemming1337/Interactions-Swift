@@ -41,6 +41,7 @@ struct Counter: Scene {
     
     var body: some Renderable {
         VStack {
+            ProgressBar(progress: count.value)
             Text("Counter is at \(count.value)")
             Button(Key.cA, "Count up") {
                 count.value += 1
