@@ -59,7 +59,7 @@ Let's add a button to your app:
 var body: some Renderable {
     ...
     Button(.cA, "Press me!") {
-        print("Hoorray!")
+        print("Hooray!")
     }
     ...
 }
