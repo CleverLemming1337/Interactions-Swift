@@ -97,16 +97,10 @@ struct SecondScene: Scene {
 
 2. Add this to your app struct:
 
-
-
-
-
 ```swift
 var body: some Renderable {
     ...
-    NavigationLink(key: .n1, name: "Press me to navigate", title: "Second scene") {
-        SecondScene()
-    }
+    NavigationLink(key: .n1, label: "Press me to navigate", destination: SecondScene())
     ...
 }
 ```
