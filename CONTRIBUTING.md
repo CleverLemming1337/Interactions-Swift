@@ -10,4 +10,7 @@ Please note the following things before contributing to this project:
 4. When you're done, please create a pull request in this repository. Describe what you've changed.
 5. Wait until your PR is merged.
 
+> [!TIP]
+> For beginners, look for issues labelled with "good first issue".
+
 Thank you!
