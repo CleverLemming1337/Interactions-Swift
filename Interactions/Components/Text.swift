@@ -142,6 +142,15 @@ public struct VStack: Interaction, Formattable {
         self.spacing = spacing
     }
 }
+
+public struct Separator: Interaction {
+    public init() { }
+    
+    public var body: some Renderable {
+        RawText(" \u{0} ")
+    }
+}
+
 func wrapLine(line: String, width: UInt16) -> [String] {
     if line.trimmingCharacters(in: .whitespacesAndNewlines).count <= width {
         return [line.trimmingCharacters(in: .whitespacesAndNewlines)]
