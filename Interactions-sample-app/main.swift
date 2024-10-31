@@ -39,6 +39,8 @@ struct Counter: Scene {
     
     let title = "State demo"
     
+    let isOn = StateItem(false)
+    
     var body: some Renderable {
         VStack {
             ProgressBar(progress: count.value)
@@ -53,6 +55,7 @@ struct Counter: Scene {
             else {
                 Text("Press 1 to enter your name")
             }
+            Toggle(label: "Press 2 to toggle me", key: .n2, isOn: isOn)
         }
     }
 }
