@@ -45,6 +45,7 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
         KeyBinder.shared.unbindAll()
         let sceneTitle = (scene as? any Scene)?.title
         navigationPath.append((sceneTitle ?? title, scene))
+        ScrollController.shared.scrollIndex = 0
         renderApp()
     }
 
@@ -55,10 +56,11 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
             fatalError("Your environmennt does not support ANSI escape sequences which are required to use this app. If you are running this app in Xcode, try `swift run` from a terminal.")
         }
         clearScreen()
-        print("\n\n")
-        print(scene.render())
         showTitle()
         showSubHeader()
+        print("\n", terminator: "")
+        print(ScrollController.shared.renderWithScroll(text: scene.render()))
+        
     }
     func clearScreen() {
         print("\u{001B}[2J\u{001B}[H", terminator: "")
@@ -73,6 +75,7 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
     }
     func back() {
         _ = navigationPath.popLast()
+        ScrollController.shared.scrollIndex = 0
         renderApp()
     }
     func moveCursor(to position: (row: UInt16, col: UInt16)) {
@@ -90,4 +93,36 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
 
 public func renderInteraction(@InteractionBuilder _ components: () -> [Renderable]) {
     print(components().render())
+}
+
+public class ScrollController: @unchecked Sendable {
+    static let shared = ScrollController()
+    
+    var scrollIndex = 0
+    
+    func scroll(_ lines: Int = 1) {
+        if scrollIndex+lines < 0 {
+            scrollIndex = 0
+            return
+        }
+        scrollIndex += lines
+        
+        AppRenderer.shared.renderApp()
+    }
+    
+    func renderWithScroll(text: String) -> String {
+        let lines = text.split(separator: "\n")
+        
+        if lines.count < AppRenderer.shared.terminalSize.1-3 { // Content to short to be scrolled
+            scrollIndex = 0 // prevent bouncing down when a state rendered item is revealed
+            return lines.joined(separator: "\n")
+        }
+        
+        if scrollIndex >= lines.count {
+            scrollIndex = lines.count - 1
+        }
+        let endIndex = Int(AppRenderer.shared.terminalSize.1)+scrollIndex-5 < lines.count ? Int(AppRenderer.shared.terminalSize.1)+scrollIndex-5 : lines.count - 1
+        
+        return lines[scrollIndex...endIndex].joined(separator: "\n")
+    }
 }
