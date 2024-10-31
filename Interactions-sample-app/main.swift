@@ -200,12 +200,13 @@ struct HelloWorld: Interaction {
             let log = Log(level: .info, message: "This is an info message")
             logger.log(log)
         }
-        Button(.arrowUp, "Try keys") {
+        Button(.cD, "Try keys") {
+            print("Press any key, ESC to exit")
             var key = Key.null
             repeat {
                 key = readKey()
                 print(key.name, key.rawValue)
-            } while key != .newLine
+            } while key != .escape
         }
         NavigationLink(key: .f1, label: "About", destination: About())
         NavigationLink(key: .n1, label: "State demo", destination: Counter())
