@@ -12,10 +12,13 @@ public struct Toggle: Interaction {
     let key: Key
     let isOn: StateItem<Bool>
     
+    @Environment(\.terminalSize) var terminalSize
+    
     public var body: some Renderable {
         HStack(spacing: 0) {
             if label != nil {
-                Text(label!+" ")
+                let width = terminalSize.0 < 30 ? Int(terminalSize.0) : 30
+                Text(label!+String(repeating: " ", count: width-label!.count-7 < 0 ? 1 : (width-label!.count-7)))
             }
             if isOn.value {
                 Text("\(centered: key.name, width: 5)")
