@@ -131,7 +131,7 @@ public struct VStack: Interaction, Formattable {
         for (index, element) in elements.enumerated() {
             result += element.render() + "\n"
             if index < elements.count - 1 {
-                result += String(repeating: "\n", count: spacing)
+                result += Separator(spacing).render()
             }
         }
         return RawText(result)
@@ -144,10 +144,14 @@ public struct VStack: Interaction, Formattable {
 }
 
 public struct Separator: Interaction {
-    public init() { }
+    let lines: Int
+    
+    public init(_ lines: Int = 1) {
+        self.lines = lines
+    }
     
     public var body: some Renderable {
-        RawText(" \u{0} ")
+        RawText(String(repeating: " \u{0} \n", count: lines))
     }
 }
 
