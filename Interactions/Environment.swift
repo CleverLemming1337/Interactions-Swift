@@ -19,6 +19,14 @@ public class EnvironmentProvider: @unchecked Sendable {
             AppRenderer.shared.terminalSize
         }
     }
+    public var tabIndex: Int {
+        get {
+            TabManager.shared.tabIndex.value
+        }
+        set {
+            TabManager.shared.tabIndex.value = newValue
+        }
+    }
     
     func setSettings(_ settings: AppSettings) {
         self.settings = settings
