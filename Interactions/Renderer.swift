@@ -6,7 +6,14 @@
 //
 
 import Foundation
+
+#if os(macOS)
 import Darwin
+#elseif os(Linux)
+import Glibc
+#else
+#error("Unknown OS")
+#endif
 
 extension String.StringInterpolation {
     mutating func appendInterpolation(centered text: String, width: UInt16, filling: Character = " ") {
@@ -34,9 +41,15 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
     var terminalSize: (UInt16, UInt16) {
         get {
             var w = winsize()
+            #if os(macOS)
             if ioctl(STDOUT_FILENO, TIOCGWINSZ, &w) == 0 {
                 return (w.ws_col, w.ws_row)
             }
+            #elseif os(Linux)
+            if ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &w) == 0 {
+                return (w.ws_col, w.ws_row)
+            }
+            #endif
             return (0, 0)
         }
     }
@@ -80,11 +93,19 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
     }
     func hideCursor() {
         print("\u{1b}[?25l", terminator: "")
+
+        // not working with Glibc
+        #if os(macOS)
         fflush(stdout)
+        #endif
     }
     func showCursor() {
         print("\u{1b}[?25h", terminator: "")
+
+        // not working with Glibc
+        #if os(macOS)
         fflush(stdout)
+        #endif
     }
 }
 
