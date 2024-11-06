@@ -53,6 +53,8 @@ struct Counter: Scene {
     
     let title = "State demo"
     
+    let isOn = StateItem(false)
+    
     var body: some Renderable {
         VStack {
             ProgressBar(progress: count.value)
@@ -67,6 +69,7 @@ struct Counter: Scene {
             else {
                 Text("Press 1 to enter your name")
             }
+            Toggle(label: "Press 2 to toggle me", key: .n2, isOn: isOn)
         }
     }
 }
@@ -81,6 +84,116 @@ struct AlertDemo: Scene {
         Text("\nThis text will be behind the alert.")
         Alert(title: "Alert title", text: "Here’s to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They’re not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. But the only thing you can’t do is ignore them. Because they change things. They push the human race forward. And while some may see them as the crazy ones, We see genius. Because the people who are crazy enough to think they can change the world, Are the ones who do.", level: .info, isPresented: showAlert)
         
+    }
+}
+
+struct ScrollDemo: Scene {
+    let title = "Scroll demo"
+    
+    var body: some Renderable {
+        Text("Use \(Key.arrowUp.name) and \(Key.arrowDown.name) to scroll.")
+        Separator()
+        Text("Here’s")
+        Text("to")
+        Text("the")
+        Text("crazy")
+        Text("ones.")
+        Text("The")
+        Text("misfits.")
+        Text("The")
+        Text("rebels.")
+        Text("The")
+        Text("troublemakers.")
+        Text("The")
+        Text("round")
+        Text("pegs")
+        Text("in")
+        Text("the")
+        Text("square")
+        Text("holes.")
+        Text("The")
+        Text("ones")
+        Text("who")
+        Text("see")
+        Text("things")
+        Text("differently.")
+        Text("They’re")
+        Text("not")
+        Text("fond")
+        Text("of")
+        Text("rules.")
+        Text("And")
+        Text("they")
+        Text("have")
+        Text("no")
+        Text("respect")
+        Text("for")
+        Text("the")
+        Text("status")
+        Text("quo.")
+        Text("You")
+        Text("can")
+        Text("quote")
+        Text("them,")
+        Text("disagree")
+        Text("with")
+        Text("them,")
+        Text("glorify")
+        Text("or")
+        Text("vilify")
+        Text("them.")
+        Text("But")
+        Text("the")
+        Text("only")
+        Text("thing")
+        Text("you")
+        Text("can’t")
+        Text("do")
+        Text("is")
+        Text("ignore")
+        Text("them.")
+        Text("Because")
+        Text("they")
+        Text("change")
+        Text("things.")
+        Text("They")
+        Text("push")
+        Text("the")
+        Text("human")
+        Text("race")
+        Text("forward.")
+        Text("And")
+        Text("while")
+        Text("some")
+        Text("may")
+        Text("see")
+        Text("them")
+        Text("as")
+        Text("the")
+        Text("crazy")
+        Text("ones,")
+        Text("We")
+        Text("see")
+        Text("genius.")
+        Text("Because")
+        Text("the")
+        Text("people")
+        Text("who")
+        Text("are")
+        Text("crazy")
+        Text("enough")
+        Text("to")
+        Text("think")
+        Text("they")
+        Text("can")
+        Text("change")
+        Text("the")
+        Text("world,")
+        Text("Are")
+        Text("the")
+        Text("ones")
+        Text("who")
+        Text("do.")
     }
 }
 struct HelloWorld: Interaction {
@@ -104,16 +217,18 @@ struct HelloWorld: Interaction {
             let log = Log(level: .info, message: "This is an info message")
             logger.log(log)
         }
-        Button(.arrowUp, "Try keys") {
+        Button(.cD, "Try keys") {
+            print("Press any key, ESC to exit")
             var key = Key.null
             repeat {
                 key = readKey()
                 print(key.name, key.rawValue)
-            } while key != .newLine
+            } while key != .escape
         }
         NavigationLink(key: .f1, label: "About", destination: About())
         NavigationLink(key: .n1, label: "State demo", destination: Counter())
         NavigationLink(key: .n2, label: "Alert demo", destination: AlertDemo())
+        NavigationLink(key: .n3, label: "Scroll demo", destination: ScrollDemo())
         NavigationLink(key: .n3, label: "Tab demo", destination: TabDemo())
     }
 }

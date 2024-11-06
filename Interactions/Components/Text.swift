@@ -131,7 +131,7 @@ public struct VStack: Interaction, Formattable {
         for (index, element) in elements.enumerated() {
             result += element.render() + "\n"
             if index < elements.count - 1 {
-                result += String(repeating: "\n", count: spacing)
+                result += Separator(spacing).render()
             }
         }
         return RawText(result)
@@ -140,6 +140,18 @@ public struct VStack: Interaction, Formattable {
     public init(spacing: Int = 1, @InteractionBuilder _ content: () -> [Renderable]) {
         self.elements = content()
         self.spacing = spacing
+    }
+}
+
+public struct Separator: Interaction {
+    let lines: Int
+    
+    public init(_ lines: Int = 1) {
+        self.lines = lines
+    }
+    
+    public var body: some Renderable {
+        RawText(String(repeating: " \u{0} \n", count: lines))
     }
 }
 
@@ -155,6 +167,7 @@ func unpackComponents(components: [Renderable]) -> [Renderable] {
     }
     return result
 }
+
 func wrapLine(line: String, width: UInt16) -> [String] {
     if line.trimmingCharacters(in: .whitespacesAndNewlines).count <= width {
         return [line.trimmingCharacters(in: .whitespacesAndNewlines)]

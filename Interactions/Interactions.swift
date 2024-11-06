@@ -112,7 +112,7 @@ public extension App {
         @Environment(\.dismiss) var dismiss
         
         while true {
-            let key = readKey() // Hier wird die Taste gelesen
+            let key = readKey()
             if key == .escape {
                 dismiss()
             }
@@ -121,6 +121,15 @@ public extension App {
             }
             else if key == .cX {
                 break
+            }
+            else if key == .arrowUp {
+                ScrollController.shared.scroll(-1)
+            }
+            else if key == .arrowDown {
+                ScrollController.shared.scroll()
+            }
+            else if key == .space {
+                ScrollController.shared.scroll(Int(AppRenderer.shared.terminalSize.1)-5)
             }
             else {
                 KeyBinder.shared.execute(with: key)

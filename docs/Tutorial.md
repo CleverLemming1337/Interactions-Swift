@@ -116,7 +116,4 @@ var body: some Renderable {
 
 The navigation link is basically just a button in the app's accent color that navigates to the given scene when it's pressed. It has one additional argument: `title` is the title that's shown in the white header bar when the scene is active.
 
-> [!NOTE]
-> You may have noticed the `title` prop of your second scene. Unfortunately it's currently not possible yet to display this title in the header. I'm working on it! 🔨
-
 – _to be continued_ –
