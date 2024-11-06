@@ -49,17 +49,27 @@ public struct TabView: Interaction {
     public init(tabs: [TabItem]) {
         self.tabs = tabs
         
-        KeyBinder.shared.bind(with: .arrowLeft, to: { TabManager.shared.changeTabIndex(by: -1) })
-        KeyBinder.shared.bind(with: .arrowRight, to: { TabManager.shared.changeTabIndex(by: 1) })
+        KeyBinder.shared.bind(with: .arrowLeft, to: { TabManager.shared.changeTabIndex(by: -1, max: tabs.count) })
+        KeyBinder.shared.bind(with: .arrowRight, to: { TabManager.shared.changeTabIndex(by: 1, max: tabs.count) })
     }
 }
 
-public struct TabManager: @unchecked Sendable{
+public class TabManager: @unchecked Sendable{
     static let shared = TabManager()
     
-    let tabIndex = StateItem(0)
+    var tabIndex: Int = 0
     
-    public func changeTabIndex(by: Int) {
-        tabIndex.value += by
+    public func changeTabIndex(by: Int, max: Int = -1) {
+        setTabIndex(to: tabIndex+by)
+    }
+    
+    public func setTabIndex(to index: Int, max: Int = -1) {
+        if index < 0 {
+            tabIndex = 0
+        }
+        else {
+            tabIndex = index
+        }
+        AppRenderer.shared.renderApp()
     }
 }
