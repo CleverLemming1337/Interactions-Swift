@@ -117,7 +117,7 @@ public struct HStack: Interaction, Formattable {
     }
 
     public init(spacing: Int = 1, @InteractionBuilder _ content: () -> [Renderable]) {
-        self.elements = content()
+        self.elements = unpackComponents(components: content())
         self.spacing = spacing
     }
 }
@@ -153,6 +153,19 @@ public struct Separator: Interaction {
     public var body: some Renderable {
         RawText(String(repeating: " \u{0} \n", count: lines))
     }
+}
+
+func unpackComponents(components: [Renderable]) -> [Renderable] {
+    var result = [Renderable]()
+    for component in components {
+        if let componentGroup = component as? [Renderable] {
+            result.append(contentsOf: unpackComponents(components: componentGroup))
+        }
+        else {
+            result.append(component)
+        }
+    }
+    return result
 }
 
 func wrapLine(line: String, width: UInt16) -> [String] {

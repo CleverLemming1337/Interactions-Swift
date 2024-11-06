@@ -62,6 +62,11 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
         renderApp()
     }
 
+    func switchScene(to scene: any Renderable) {
+        _ = navigationPath.popLast()
+        setScene(scene)
+    }
+    
     func renderApp() {
         guard let scene = navigationPath.last?.1 else { return }
         

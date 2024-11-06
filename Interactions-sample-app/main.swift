@@ -22,6 +22,20 @@ struct InteractionsSampleApp: App {
     }
 }
 
+struct TabDemo: Scene {
+    let title = "Tab demo"
+    
+    var body: some Renderable {
+        TabView(tabs: [
+            TabItem(title: "Tab A") {
+                Text("Tab A")
+            },
+            TabItem(title: "Tab B") {
+                Text("Tab B")
+            }
+        ])
+    }
+}
 struct About: Scene {
     @Environment(\.settings) var settings
     
@@ -215,6 +229,7 @@ struct HelloWorld: Interaction {
         NavigationLink(key: .n1, label: "State demo", destination: Counter())
         NavigationLink(key: .n2, label: "Alert demo", destination: AlertDemo())
         NavigationLink(key: .n3, label: "Scroll demo", destination: ScrollDemo())
+        NavigationLink(key: .n3, label: "Tab demo", destination: TabDemo())
     }
 }
 
