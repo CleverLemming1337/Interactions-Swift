@@ -33,13 +33,17 @@ public struct TabView: Interaction {
             for (index, tab) in tabs.enumerated() {
                 if index == tabIndex {
                     Text("\(tab.title)")
+                        .padding()
                         .reversed()
                 }
                 else {
                     Text("\(tab.title)")
+                        .padding()
                 }
             }
+            Text("\n")
         }
+        .underlined()
         
         tabs[tabIndex]
     }
