@@ -49,7 +49,7 @@ public extension Formattable {
         return Text("\u{001B}\(start)\(self.render())\u{001B}\(end)")
     }
     func centered(width: UInt16) -> Formattable {
-        return Text("\(centered: self.render(), width: width)")
+        return Text("\(self.render(), width: width)")
     }
     func underlined() -> Formattable {
         return Text("\u{1b}[4m\(self.render())\u{1b}[24m")
@@ -229,4 +229,10 @@ public func wrapLinesByWords(text: String, width: UInt16) -> String {
     }
     
     return result.joined(separator: "\n")
+}
+
+public enum Alignment {
+    case leading
+    case center
+    case trailing
 }

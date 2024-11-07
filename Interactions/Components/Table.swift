@@ -12,13 +12,14 @@ public struct Table<T>: Interaction {
             }
         }
             .reversed()
-        for row in data {
+        for (rowIndex, row) in data.enumerated() {
             HStack {
                 for (index, column) in columns.enumerated() {
-                    Text("\(centered: column.renderCell(row).render(), width: UInt16(columns[index].title.count))")
+                    Text("\(column.renderCell(row).render(), width: UInt16(columns[index].title.count), alignment: column.alignment)")
                         .padding()
                 }
             }
+            .background(rowIndex % 2 == 1 ? .color256(238) : .normal)
         }
     }
 
@@ -37,12 +38,15 @@ public struct Table<T>: Interaction {
 public struct TableColumn<T>: Interaction {
     let renderCell: (T) -> Renderable
     let title: String
+    let alignment: Alignment
+
     public var body: some Renderable {
         Text("")
     }
 
-    public init(_ title: String, _ renderCell: @escaping (T) -> Renderable) {
+    public init(_ title: String, alignment: Alignment = .leading, _ renderCell: @escaping (T) -> Renderable) {
         self.title = title
         self.renderCell = renderCell
+        self.alignment = alignment
     }
 }
