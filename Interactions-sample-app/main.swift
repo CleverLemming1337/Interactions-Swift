@@ -229,7 +229,7 @@ struct HelloWorld: Interaction {
         NavigationLink(key: .n1, label: "State demo", destination: Counter())
         NavigationLink(key: .n2, label: "Alert demo", destination: AlertDemo())
         NavigationLink(key: .n3, label: "Scroll demo", destination: ScrollDemo())
-        NavigationLink(key: .n3, label: "Tab demo", destination: TabDemo())
+        NavigationLink(key: .n4, label: "Tab demo", destination: TabDemo())
     }
 }
 
