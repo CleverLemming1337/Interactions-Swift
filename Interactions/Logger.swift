@@ -80,7 +80,7 @@ struct RenderedLog: Interaction {
     public var body: some Renderable {
         HStack {
             Text(log.date.description)
-            Text("[\("\(centered: "\(log.level)", width: 7)".uppercased())]")
+            Text("[\("\("\(log.level)", width: 7)".uppercased())]")
             Text(log.message)
         }
         .tint(log.level.color)

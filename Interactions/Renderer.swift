@@ -16,12 +16,22 @@ import Glibc
 #endif
 
 extension String.StringInterpolation {
-    mutating func appendInterpolation(centered text: String, width: UInt16, filling: Character = " ") {
+    mutating func appendInterpolation(_ text: String, width: UInt16, alignment: Alignment = .center, filling: Character = " ") {
         let padding = max(0, Int(width) - text.count)
         let leftPadding = padding / 2
         let rightPadding = padding - leftPadding
 
-        let centeredText = String(repeating: filling, count: leftPadding) + text + String(repeating: filling, count: rightPadding)
+        let centeredText: String = {
+            switch alignment {
+                case .center:
+                    return String(repeating: filling, count: leftPadding) + text + String(repeating: filling, count: rightPadding)
+                case .leading:
+                    return text + String(repeating: filling, count: padding)
+                case .trailing:
+                    return String(repeating: filling, count: padding) + text
+            }
+        }()
+
         appendLiteral(centeredText)
     }
     mutating func appendInterpolation(_ text: String, width: UInt16) {
@@ -85,7 +95,7 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
     }
     func showTitle() {
         let title = navigationPath.last?.0 ?? ""
-        print("\u{001B}7\u{001B}[H\u{001B}[7m\(navigationPath.count > 1 ? " < ESC" : "")\(centered: title, width: terminalSize.0-(navigationPath.count > 1 ? 12 : 0))\(navigationPath.count > 1 ? "      " : "")\u{1b}[27m\u{1b}8")
+        print("\u{001B}7\u{001B}[H\u{001B}[7m\(navigationPath.count > 1 ? " < ESC" : "")\(title, width: terminalSize.0-(navigationPath.count > 1 ? 12 : 0), alignment: .center)\(navigationPath.count > 1 ? "      " : "")\u{1b}[27m\u{1b}8")
     }
     func showSubHeader() {
         print("\("\u{1b}7\u{1b}[2;0H\u{1b}[100m \u{1b}[1m^L\u{1b}[22m Show log    \u{1b}[1mF1\u{1b}[22m Help    \u{1b}[1m^X\u{1b}[22m Exit", width: terminalSize.0+41)\u{1b}[0m\u{1b}8")

@@ -21,13 +21,13 @@ public struct Toggle: Interaction {
                 Text(label!+String(repeating: " ", count: width-label!.count-7 < 0 ? 1 : (width-label!.count-7)))
             }
             if isOn.value {
-                Text("\(centered: key.name, width: 5)")
+                Text("\(key.name, width: 5)")
                     .background(.green)
             }
             Text("  ")
                 .reversed()
             if !isOn.value {
-                Text("\(centered: key.name, width: 5)")
+                Text("\(key.name, width: 5)")
                     .other("[100m", end: "[49m")
             }
         }

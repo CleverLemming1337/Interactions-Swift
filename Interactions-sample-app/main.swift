@@ -22,20 +22,6 @@ struct InteractionsSampleApp: App {
     }
 }
 
-struct TabDemo: Scene {
-    let title = "Tab demo"
-    
-    var body: some Renderable {
-        TabView(tabs: [
-            TabItem(title: "Tab A") {
-                Text("Tab A")
-            },
-            TabItem(title: "Tab B") {
-                Text("Tab B")
-            }
-        ])
-    }
-}
 struct About: Scene {
     @Environment(\.settings) var settings
     
@@ -54,6 +40,8 @@ struct Counter: Scene {
     let title = "State demo"
     
     let isOn = StateItem(false)
+
+    let data = [("A", "a"), ("B", "b")]
     
     var body: some Renderable {
         VStack {
@@ -71,19 +59,6 @@ struct Counter: Scene {
             }
             Toggle(label: "Press 2 to toggle me", key: .n2, isOn: isOn)
         }
-    }
-}
-
-struct AlertDemo: Scene {
-    let title = "Alert demo"
-    let showAlert = StateItem(false)
-    var body: some Renderable {
-        Button(.cD, "Show alert") {
-            showAlert.value = true
-        }
-        Text("\nThis text will be behind the alert.")
-        Alert(title: "Alert title", text: "Here’s to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They’re not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. But the only thing you can’t do is ignore them. Because they change things. They push the human race forward. And while some may see them as the crazy ones, We see genius. Because the people who are crazy enough to think they can change the world, Are the ones who do.", level: .info, isPresented: showAlert)
-        
     }
 }
 
@@ -210,9 +185,6 @@ struct HelloWorld: Interaction {
             .bold()
         Text("This text is in the app's accent color")
             .tint()
-        Button(.cA, "Press me with ^A") {
-            print("Button pressed")
-        }
         Button(.cB, "Add log message") {
             let log = Log(level: .info, message: "This is an info message")
             logger.log(log)
@@ -225,11 +197,12 @@ struct HelloWorld: Interaction {
                 print(key.name, key.rawValue)
             } while key != .escape
         }
+        Separator()
         NavigationLink(key: .f1, label: "About", destination: About())
         NavigationLink(key: .n1, label: "State demo", destination: Counter())
-        NavigationLink(key: .n2, label: "Alert demo", destination: AlertDemo())
-        NavigationLink(key: .n3, label: "Scroll demo", destination: ScrollDemo())
-        NavigationLink(key: .n4, label: "Tab demo", destination: TabDemo())
+        NavigationLink(key: .n2, label: "Scroll demo", destination: ScrollDemo())
+        Separator()
+        NavigationLink(key: .n3, label: "Components", destination: ComponentList())
     }
 }
 
