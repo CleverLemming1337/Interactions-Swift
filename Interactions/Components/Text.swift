@@ -51,6 +51,9 @@ public extension Formattable {
     func centered(width: UInt16) -> Formattable {
         return Text("\(centered: self.render(), width: width)")
     }
+    func underlined() -> Formattable {
+        return Text("\u{1b}[4m\(self.render())\u{1b}[24m")
+    }
 }
 
 public enum Color {

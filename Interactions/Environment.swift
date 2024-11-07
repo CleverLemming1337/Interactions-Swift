@@ -23,10 +23,10 @@ public class EnvironmentProvider: @unchecked Sendable {
     }
     public var tabIndex: Int {
         get {
-            TabManager.shared.tabIndex.value
+            TabManager.shared.tabIndex
         }
         set {
-            TabManager.shared.tabIndex.value = newValue
+            TabManager.shared.tabIndex = newValue
         }
     }
     

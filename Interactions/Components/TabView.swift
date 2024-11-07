@@ -23,8 +23,6 @@ public struct TabItem: Scene {
     }
 }
 
-nonisolated(unsafe) let tabKeys: [Key] = [.n1, .n2, .n3, .n4, .n5, .n6, .n7, .n8, .n9, .n0]
-
 public struct TabView: Interaction {
     let tabs: [TabItem]
     
@@ -34,14 +32,18 @@ public struct TabView: Interaction {
         HStack {
             for (index, tab) in tabs.enumerated() {
                 if index == tabIndex {
-                    Text(" \(tab.key?.name ?? tabKeys[index].name) \(tab.title)")
+                    Text("\(tab.title)")
+                        .padding()
                         .reversed()
                 }
                 else {
-                    Text(" \(tab.key?.name ?? tabKeys[index].name) \(tab.title)")
+                    Text("\(tab.title)")
+                        .padding()
                 }
             }
+            Text("\n")
         }
+        .underlined()
         
         tabs[tabIndex]
     }
@@ -49,17 +51,30 @@ public struct TabView: Interaction {
     public init(tabs: [TabItem]) {
         self.tabs = tabs
         
-        KeyBinder.shared.bind(with: .arrowLeft, to: { TabManager.shared.changeTabIndex(by: -1) })
-        KeyBinder.shared.bind(with: .arrowRight, to: { TabManager.shared.changeTabIndex(by: 1) })
+        KeyBinder.shared.bind(with: .arrowLeft, to: { TabManager.shared.changeTabIndex(by: -1, max: tabs.count-1) })
+        KeyBinder.shared.bind(with: .arrowRight, to: { TabManager.shared.changeTabIndex(by: 1, max: tabs.count-1) })
     }
 }
 
-public struct TabManager: @unchecked Sendable{
+public class TabManager: @unchecked Sendable {
     static let shared = TabManager()
     
-    let tabIndex = StateItem(0)
+    var tabIndex: Int = 0
     
-    public func changeTabIndex(by: Int) {
-        tabIndex.value += by
+    public func changeTabIndex(by: Int, max: Int = -1) {
+        setTabIndex(to: tabIndex+by, max: max)
+    }
+    
+    public func setTabIndex(to index: Int, max: Int = -1) {
+        if index < 0 {
+            tabIndex = 0
+        }
+        else if max > 0 && index > max {
+            tabIndex = max
+        }
+        else {
+            tabIndex = index
+        }
+        AppRenderer.shared.renderApp()
     }
 }
