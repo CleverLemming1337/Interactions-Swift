@@ -54,6 +54,8 @@ struct Counter: Scene {
     let title = "State demo"
     
     let isOn = StateItem(false)
+
+    let data = [("A", "a"), ("B", "b")]
     
     var body: some Renderable {
         VStack {
@@ -70,6 +72,15 @@ struct Counter: Scene {
                 Text("Press 1 to enter your name")
             }
             Toggle(label: "Press 2 to toggle me", key: .n2, isOn: isOn)
+        }
+
+        Table(data) {
+            TableColumn<(String, String)>("Lowercase") { row in
+                Text(row.0)
+            }
+            TableColumn<(String, String)>("Uppercase") { row in
+                Text(row.1)
+            }
         }
     }
 }
