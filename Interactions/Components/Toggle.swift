@@ -27,7 +27,7 @@ public struct Toggle: Interaction {
             Text("  ")
                 .reversed()
             if !isOn.value {
-                Text("\(key.name, width: 5)")
+                Text("\(key.name, width: 5, alignment: .center)")
                     .other("[100m", end: "[49m")
             }
         }

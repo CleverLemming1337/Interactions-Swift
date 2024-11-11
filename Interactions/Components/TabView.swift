@@ -41,7 +41,6 @@ public struct TabView: Interaction {
                         .padding()
                 }
             }
-            Text("\n")
         }
         .underlined()
         
