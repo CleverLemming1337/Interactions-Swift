@@ -8,6 +8,7 @@ struct ComponentList: Scene {
         NavigationLink(key: .n2, label: "Button", destination: ButtonDemo())
         NavigationLink(key: .n3, label: "TabView", destination: TabDemo())
         NavigationLink(key: .n4, label: "Alert", destination: AlertDemo())
+        NavigationLink(key: .n5, label: "NumberField", destination: NumberFieldDemo())
     }
 }
 
@@ -61,6 +62,18 @@ struct AlertDemo: Scene {
             }
             Text("\nThis text will be behind the alert.")
             Alert(title: "Alert title", text: "Here's to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They’re not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. But the only thing you can’t do is ignore them. Because they change things. They push the human race forward. And while some may see them as the crazy ones, We see genius. Because the people who are crazy enough to think they can change the world, Are the ones who do.", level: .info, isPresented: showAlert)
+        }
+    }
+}
+
+struct NumberFieldDemo: Scene {
+    let title = "NumberField"
+    let number = StateItem(0)
+
+    var body: some Renderable {
+        VStack {
+            NumberField(.n1, "Enter a number", number: number)
+            Text("Doubled: \(number.value*2)")
         }
     }
 }
