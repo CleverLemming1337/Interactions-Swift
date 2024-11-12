@@ -100,10 +100,7 @@ public extension App {
         let original = enableRawMode()
         AppRenderer.shared.hideCursor()
         
-        defer {
-            disableRawMode(original: original)
-            AppRenderer.shared.showCursor()
-        }
+        interceptSignals()
         
         AppRenderer.shared.clearScreen()
         AppRenderer.shared.setScene(self)
@@ -118,9 +115,6 @@ public extension App {
             }
             else if key == .cL {
                 AppRenderer.shared.setScene(LogList())
-            }
-            else if key == .cX {
-                break
             }
             else if key == .arrowUp {
                 ScrollController.shared.scroll(-1)
