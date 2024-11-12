@@ -54,12 +54,12 @@ public struct Navigation: Interaction {
     let options: [MenuOption]
     public var body: some Renderable {
         for (index, option) in options.prefix(9).enumerated() {
-            Button(Key(rawValue: UInt16(index+49)) ?? .null, option.name) {
+            Button(Key(rawValue: Int16(index+49)) ?? .null, option.name) {
                 renderInteraction {
                     Text("You chose: \(option.name)")
                 }
                 for index in 0..<options.count {
-                    keyBinder.unbind(key: Key(rawValue: UInt16(index+49)) ?? .null)
+                    keyBinder.unbind(key: Key(rawValue: Int16(index+49)) ?? .null)
                 }
                 renderer.renderApp()
             }

@@ -42,6 +42,8 @@ func disableRawMode(original: consuming termios) {
         return .null
     }
     
+    print(buf)
+    
     if buf[0] == 27 {
         let readMore = read(STDIN_FILENO, &buf[1], 2)
         
@@ -87,7 +89,7 @@ func disableRawMode(original: consuming termios) {
     }
     
     // Falls es keine Escape-Sequenz war, gib das einfache Zeichen zurück
-    return Key(rawValue: UInt16(buf[0])) ?? .null
+    return Key(rawValue: Int16(buf[0])) ?? .null
 }
 
 
@@ -99,7 +101,7 @@ func supportsAnsiCodes() -> Bool {
     return term.lowercased() != "dumb"
 }
 
-public enum Key: UInt16 {
+public enum Key: Int16 {
     case null = 0
     case cA = 1
     case cB = 2
@@ -259,7 +261,7 @@ public enum Key: UInt16 {
     }
 }
 
-let keyNames: [UInt16: String] = [
+let keyNames: [Int16: String] = [
     1: "^A",
     2: "^B",
     3: "^C",
@@ -399,7 +401,7 @@ let keyNames: [UInt16: String] = [
     300: "ESC",
 ]
 
-let keyStrings: [UInt16: String] = [
+let keyStrings: [Int16: String] = [
     9: "\t",       // Tab
     10: "\n",      // Enter
     13: "\r",      // Carriage Return (CR)
