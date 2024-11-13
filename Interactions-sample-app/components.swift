@@ -9,6 +9,7 @@ struct ComponentList: Scene {
         NavigationLink(key: .n3, label: "TabView", destination: TabDemo())
         NavigationLink(key: .n4, label: "Alert", destination: AlertDemo())
         NavigationLink(key: .n5, label: "NumberField", destination: NumberFieldDemo())
+        NavigationLink(key: .n6, label: "Slider", destination: SliderDemo())
     }
 }
 
@@ -75,5 +76,13 @@ struct NumberFieldDemo: Scene {
             NumberField(.n1, "Enter a number", number: number)
             Text("Doubled: \(number.value*2)")
         }
+    }
+}
+
+struct SliderDemo: Scene {
+    let title = "Slider"
+    let value = StateItem(0)
+    var body: some Renderable {
+        Slider(key: .n1)
     }
 }
