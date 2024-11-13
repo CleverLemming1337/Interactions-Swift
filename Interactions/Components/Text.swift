@@ -49,7 +49,10 @@ public extension Formattable {
         return Text("\u{001B}\(start)\(self.render())\u{001B}\(end)")
     }
     func centered(width: UInt16) -> Formattable {
-        return Text("\(centered: self.render(), width: width)")
+        return Text("\(self.render(), width: width)")
+    }
+    func underlined() -> Formattable {
+        return Text("\u{1b}[4m\(self.render())\u{1b}[24m")
     }
 }
 
@@ -117,7 +120,7 @@ public struct HStack: Interaction, Formattable {
     }
 
     public init(spacing: Int = 1, @InteractionBuilder _ content: () -> [Renderable]) {
-        self.elements = content()
+        self.elements = unpackComponents(components: content())
         self.spacing = spacing
     }
 }
@@ -131,7 +134,7 @@ public struct VStack: Interaction, Formattable {
         for (index, element) in elements.enumerated() {
             result += element.render() + "\n"
             if index < elements.count - 1 {
-                result += String(repeating: "\n", count: spacing)
+                result += Separator(spacing).render()
             }
         }
         return RawText(result)
@@ -142,6 +145,32 @@ public struct VStack: Interaction, Formattable {
         self.spacing = spacing
     }
 }
+
+public struct Separator: Interaction {
+    let lines: Int
+    
+    public init(_ lines: Int = 1) {
+        self.lines = lines
+    }
+    
+    public var body: some Renderable {
+        RawText(String(repeating: " \u{0} \n", count: lines))
+    }
+}
+
+func unpackComponents(components: [Renderable]) -> [Renderable] {
+    var result = [Renderable]()
+    for component in components {
+        if let componentGroup = component as? [Renderable] {
+            result.append(contentsOf: unpackComponents(components: componentGroup))
+        }
+        else {
+            result.append(component)
+        }
+    }
+    return result
+}
+
 func wrapLine(line: String, width: UInt16) -> [String] {
     if line.trimmingCharacters(in: .whitespacesAndNewlines).count <= width {
         return [line.trimmingCharacters(in: .whitespacesAndNewlines)]
@@ -200,4 +229,10 @@ public func wrapLinesByWords(text: String, width: UInt16) -> String {
     }
     
     return result.joined(separator: "\n")
+}
+
+public enum Alignment {
+    case leading
+    case center
+    case trailing
 }

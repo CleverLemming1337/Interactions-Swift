@@ -100,10 +100,7 @@ public extension App {
         let original = enableRawMode()
         AppRenderer.shared.hideCursor()
         
-        defer {
-            disableRawMode(original: original)
-            AppRenderer.shared.showCursor()
-        }
+        interceptSignals()
         
         AppRenderer.shared.clearScreen()
         AppRenderer.shared.setScene(self)
@@ -112,15 +109,21 @@ public extension App {
         @Environment(\.dismiss) var dismiss
         
         while true {
-            let key = readKey() // Hier wird die Taste gelesen
+            let key = readKey()
             if key == .escape {
                 dismiss()
             }
             else if key == .cL {
                 AppRenderer.shared.setScene(LogList())
             }
-            else if key == .cX {
-                break
+            else if key == .arrowUp {
+                ScrollController.shared.scroll(-1)
+            }
+            else if key == .arrowDown {
+                ScrollController.shared.scroll()
+            }
+            else if key == .space {
+                ScrollController.shared.scroll(Int(AppRenderer.shared.terminalSize.1)-5)
             }
             else {
                 KeyBinder.shared.execute(with: key)

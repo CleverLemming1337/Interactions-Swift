@@ -6,15 +6,26 @@
 //
 
 import Foundation
+
+#if os(macOS)
 import Darwin
+#elseif os(Linux)
+import Glibc
+#else
+#error("Unknown OS")
+#endif
 
 func enableRawMode() -> termios {
     var raw = termios()
     tcgetattr(STDIN_FILENO, &raw)
     let original = raw
     
+    #if os(macOS)
     raw.c_lflag &= ~(UInt(ECHO | ICANON))
-    
+    #elseif os(Linux)
+    raw.c_lflag &= ~(UInt32(ECHO | ICANON))
+    #endif
+
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw)
     return original
 }
