@@ -81,8 +81,8 @@ struct NumberFieldDemo: Scene {
 
 struct SliderDemo: Scene {
     let title = "Slider"
-    let value = StateItem(0)
+    let value = StateItem(0.0)
     var body: some Renderable {
-        Slider(key: .n1)
+        Slider(key: .n1, value: value, label: "Slider")
     }
 }
