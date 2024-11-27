@@ -98,7 +98,7 @@ public struct Slider: Interaction {
         KeyBinder.shared.bind(with: key, to: {
             AppRenderer.shared.showCursor()
             var key = readKey()
-            while key != .newLine || key != .escape {
+            while key != .newLine && key != .escape {
                 if key == .arrowLeft {
                     if value.value > min {
                         value.value -= 1
