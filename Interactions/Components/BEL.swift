@@ -1,11 +1,13 @@
 import Foundation
 
-func bel() {
-    print("\a")
+public func bel() {
+    print("\u{07}")
 }
 
 public struct BEL: Renderable {
-    func render() -> String {
-        return "\a"
+    public func render() -> String {
+        return "\u{07}"
     }
+    
+    public init() {}
 }
