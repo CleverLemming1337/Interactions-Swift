@@ -2,7 +2,7 @@ public struct NumberField: Interaction, Formattable {
     let key: Key
     let label: String
     let showShortcut: Bool
-    let number: StateItem<Int>
+    let number: Binding<Int>
     
     @Environment(\.renderer) var renderer
     
@@ -13,16 +13,16 @@ public struct NumberField: Interaction, Formattable {
         while pressedKey != .newLine {
             pressedKey = readKey()
             if pressedKey == .backspace {
-                number.value /= 10
+                number /= 10
             }
             else if allowedKeys.contains(pressedKey) {
-                number.value = number.value * 10 + Int(pressedKey.string)!
+                number = number * 10 + Int(pressedKey.string)!
             }
         }
         renderer.hideCursor()
     }
     
-    public init(_ key: Key, _ label: String, number: StateItem<Int>, showShortcut: Bool = true) {
+    public init(_ key: Key, _ label: String, number: Binding<Int>, showShortcut: Bool = true) {
         self.key = key
         self.label = label
         self.showShortcut = showShortcut
@@ -43,7 +43,7 @@ public struct NumberField: Interaction, Formattable {
                     .padding()
                     .other("[100m", end: "[49m")
             }
-            Text("\(number.value)")
+            Text("\(number)")
                     .padding()
                     .reversed()
                     .tint()

@@ -47,17 +47,17 @@ public struct Alert: Interaction {
     let title: String
     let text: String
     let level: LogLevel
-    let isPresented: StateItem<Bool>?
+    let isPresented: Binding<Bool>?
     
     public var body: some Renderable {
-        if isPresented == nil || isPresented!.value {
+        if isPresented == nil || isPresented! {
             Overlay(x: x, y: y) {
-                Text("\u{1b}[3\(level.color.value)m╭\(" \(level): ".uppercased()+title+" ", width: width, filling: "─")╮")
+                Text("\u{1b}[3\(level.color)m╭\(" \(level): ".uppercased()+title+" ", width: width, filling: "─")╮")
                     .padding(2)
-                Text("│\u{1b}[39m\(String(repeating: " ", count: Int(width)))\u{1b}[3\(level.color.value)m│")
+                Text("│\u{1b}[39m\(String(repeating: " ", count: Int(width)))\u{1b}[3\(level.color)m│")
                     .padding(2)
                 for line in wrapLinesByWords(text: text, width: width-2).split(separator: "\n") {
-                    Text("│\u{1b}[39m \(String(line), width: width-2) \u{1b}[3\(level.color.value)m│")
+                    Text("│\u{1b}[39m \(String(line), width: width-2) \u{1b}[3\(level.color)m│")
                         .padding(2)
                 }
                 Text("│\(String(repeating: " ", count: Int(width)))│")
@@ -66,10 +66,10 @@ public struct Alert: Interaction {
                     HStack {
                         Text("│\u{1b}[39m")
                         Button(.newLine, "OK", showShortcut: false) {
-                            isPresented?.value = false
+                            isPresented? = false
                         }
                         .centered(width: width+7)
-                        Text("\u{1b}[3\(level.color.value)m│")
+                        Text("\u{1b}[3\(level.color)m│")
                     }
                     .padding(2)
                 }
@@ -81,7 +81,7 @@ public struct Alert: Interaction {
         }
     }
     
-    public init(title: String, text: String, level: LogLevel, isPresented: StateItem<Bool>? = nil) {
+    public init(title: String, text: String, level: LogLevel, isPresented: Binding<Bool>? = nil) {
         @Environment(\.terminalSize) var terminalSize
         self.x = 5
         self.y = 5

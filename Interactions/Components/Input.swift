@@ -45,7 +45,7 @@ public struct TextField: Interaction, Formattable {
     let label: String
     let placeholder: String
     let showShortcut: Bool
-    let text: StateItem<String>
+    let text: Binding<String>
     
     @Environment(\.renderer) var renderer
     
@@ -55,16 +55,16 @@ public struct TextField: Interaction, Formattable {
         while pressedKey != .newLine {
             pressedKey = readKey()
             if pressedKey == .backspace {
-                _ = text.value.popLast()
+                _ = text.popLast()
             }
             else if pressedKey != .newLine && pressedKey != .carriageReturn{
-                text.value += pressedKey.string
+                text += pressedKey.string
             }
         }
         renderer.hideCursor()
     }
     
-    public init(_ key: Key, _ label: String, placeholder: String, text: StateItem<String>, showShortcut: Bool = true) {
+    public init(_ key: Key, _ label: String, placeholder: String, text: Binding<String>, showShortcut: Bool = true) {
         self.key = key
         self.label = label
         self.placeholder = placeholder
@@ -86,8 +86,8 @@ public struct TextField: Interaction, Formattable {
                     .padding()
                     .other("[100m", end: "[49m")
             }
-            if text.value.count > 0 {
-                Text(text.value)
+            if text.count > 0 {
+                Text(text)
                     .padding()
                     .reversed()
                     .tint()
