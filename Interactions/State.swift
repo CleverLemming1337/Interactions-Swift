@@ -11,7 +11,7 @@ import Foundation
 @propertyWrapper public class Binding<T> {
     var value: T {
         didSet {
-            print("Re-render")
+            AppRenderer.shared.renderApp()
         }
     }
     

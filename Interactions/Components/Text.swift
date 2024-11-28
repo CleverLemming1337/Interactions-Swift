@@ -34,10 +34,10 @@ public extension Formattable {
         return Text("\u{001B}[7m\(self.render())\u{001B}[27m")
     }
     func tint(_ color: Color = EnvironmentProvider.shared.settings.accentColor) -> Formattable {
-        return Text("\u{001B}[3\(color)m\(self.render())\u{001B}[39m")
+        return Text("\u{001B}[3\(color.value)m\(self.render())\u{001B}[39m")
     }
     func background(_ color: Color) -> Formattable {
-        return Text("\u{001B}[4\(color)m\(self.render())\u{001B}[49m")
+        return Text("\u{001B}[4\(color.value)m\(self.render())\u{001B}[49m")
     }
     func padding(_ x: UInt = 1, _ y: UInt = 0) -> Formattable {
         return Text("\(String(repeating: " ", count: Int(x)))\(self.render())\(String(repeating: " ", count: Int(x)))")
