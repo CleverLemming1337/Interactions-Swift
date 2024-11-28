@@ -7,8 +7,9 @@
 
 import Foundation
 
-public class StateItem<T> {
-    public var value: T {
+
+@propertyWrapper public class Binding<T> {
+    var value: T {
         didSet {
             AppRenderer.shared.renderApp()
         }
@@ -17,19 +18,35 @@ public class StateItem<T> {
     public init(_ value: T) {
         self.value = value
     }
+    
+    public var wrappedValue: T {
+        get {
+            value
+        }
+        set {
+            value = newValue
+        }
+    }
+    
+    public var projectedValue: Binding<T> {
+        self
+    }
 }
 
 @propertyWrapper public struct State<T> {
-    let stateitem: StateItem<T>
+    let binding: Binding<T>
     public init(wrappedValue: T) {
-        self.stateitem = StateItem<T>(wrappedValue)
+        self.binding = Binding<T>(wrappedValue)
     }
     public var wrappedValue: T {
         get {
-            stateitem.value
+            binding.value
         }
-        set {
-            stateitem.value = newValue
+        nonmutating set {
+            binding.value = newValue
         }
+    }
+    public var projectedValue: Binding<T> {
+        binding
     }
 }

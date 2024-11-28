@@ -71,7 +71,7 @@ public enum Color {
     
     /// Returns the ANSI value of the color as string
     /// Example: red is `\u{1b}[31m`
-    /// `.red.value` would return `"1"` (part between `3` and `m`
+    /// `.red` would return `"1"` (part between `3` and `m`
     var value: String {
         get {
             switch self {

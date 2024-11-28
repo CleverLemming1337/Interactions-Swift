@@ -10,7 +10,7 @@ import Foundation
 public struct Toggle: Interaction {
     let label: String?
     let key: Key
-    let isOn: StateItem<Bool>
+    @Binding var isOn: Bool
     
     @Environment(\.terminalSize) var terminalSize
     
@@ -20,24 +20,24 @@ public struct Toggle: Interaction {
                 let width = terminalSize.0 < 30 ? Int(terminalSize.0) : 30
                 Text(label!+String(repeating: " ", count: width-label!.count-7 < 0 ? 1 : (width-label!.count-7)))
             }
-            if isOn.value {
+            if isOn {
                 Text("\(key.name, width: 5)")
                     .background(.green)
             }
             Text("  ")
                 .reversed()
-            if !isOn.value {
+            if !isOn {
                 Text("\(key.name, width: 5, alignment: .center)")
                     .other("[100m", end: "[49m")
             }
         }
     }
     
-    public init(label: String? = nil, key: Key, isOn: StateItem<Bool>) {
+    public init(label: String? = nil, key: Key, isOn: Binding<Bool>) {
         self.label = label
         self.key = key
-        self.isOn = isOn
+        _isOn = isOn
         
-        KeyBinder.shared.bind(with: key, to: { isOn.value.toggle() })
+        KeyBinder.shared.bind(with: key, to: { [self] in self.isOn.toggle() })
     }
 }
