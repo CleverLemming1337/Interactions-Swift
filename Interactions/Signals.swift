@@ -14,10 +14,15 @@ import Glibc
 #error("Unknown OS")
 #endif
 
+/// Clean up terminal and exit
+func cleanUp() -> Never {
+    AppRenderer.shared.showCursor()
+    exit(SIGINT)
+}
+
 func interceptSignals() {
     signal(SIGINT) { _ in
-        AppRenderer.shared.showCursor()
-        exit(SIGINT)
+        cleanUp()
     }
     signal(SIGWINCH) { _ in
         AppRenderer.shared.renderApp()

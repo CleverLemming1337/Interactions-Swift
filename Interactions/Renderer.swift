@@ -41,7 +41,7 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
     
     private init() {}
     
-    private var navigationPath = [(String, any Renderable)]()
+    private var navigationPath = [any Renderable]()
 
     var terminalSize: (UInt16, UInt16) {
         get {
@@ -61,8 +61,7 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
     
     func setScene(_ scene: (any Renderable), title: String = "") {
         KeyBinder.shared.unbindAll()
-        let sceneTitle = (scene as? any Scene)?.title
-        navigationPath.append((sceneTitle ?? title, scene))
+        navigationPath.append(scene)
         ScrollController.shared.scrollIndex = 0
         renderApp()
     }
@@ -73,7 +72,7 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
     }
     
     func renderApp() {
-        guard let scene = navigationPath.last?.1 else { return }
+        guard let scene = navigationPath.last else { return }
         
         if !supportsAnsiCodes() {
             fatalError("Your environmennt does not support ANSI escape sequences which are required to use this app. If you are running this app in Xcode, try `swift run` from a terminal.")
@@ -89,8 +88,26 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
         print("\u{001B}[2J\u{001B}[H", terminator: "")
     }
     func showTitle() {
-        let title = navigationPath.last?.0 ?? ""
-        print("\u{001B}7\u{001B}[H\u{001B}[7m\(navigationPath.count > 1 ? " < ESC" : "")\(title, width: terminalSize.0-(navigationPath.count > 1 ? 12 : 0), alignment: .center)\(navigationPath.count > 1 ? "      " : "")\u{1b}[27m\u{1b}8")
+        let title = (navigationPath.last as? any Scene)?.title ?? ""
+        
+        var width = terminalSize.0-1
+        var header = "\u{001B}7\u{001B}[H\u{001B}[7m "
+        var backButton = ""
+        if navigationPath.count > 1 {
+            if let backTitle = (navigationPath[navigationPath.count-2] as? any Scene)?.title {
+                backButton += "< \(backTitle)"
+            }
+            else {
+                backButton = "<"
+            }
+        }
+        header += backButton
+        width -= UInt16(2*backButton.count)
+        
+        header += "\(title, width: width, alignment: .center)"
+        header += String(repeating: " ", count: backButton.count)
+        header += "\u{1b}[27m\u{1b}8"
+        print(header)
     }
     func showSubHeader() {
         print("\("\u{1b}7\u{1b}[2;0H\u{1b}[100m \u{1b}[1m^L\u{1b}[22m Show log    \u{1b}[1mF1\u{1b}[22m Help    \u{1b}[1m^C\u{1b}[22m Exit", width: terminalSize.0+41, alignment: .leading)\u{1b}[0m\u{1b}8")
