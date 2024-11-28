@@ -10,7 +10,7 @@ import Foundation
 public struct Toggle: Interaction {
     let label: String?
     let key: Key
-    let isOn: Binding<Bool>
+    @Binding var isOn: Bool
     
     @Environment(\.terminalSize) var terminalSize
     
@@ -36,8 +36,8 @@ public struct Toggle: Interaction {
     public init(label: String? = nil, key: Key, isOn: Binding<Bool>) {
         self.label = label
         self.key = key
-        self.isOn = isOn
+        _isOn = isOn
         
-        KeyBinder.shared.bind(with: key, to: { isOn.toggle() })
+        KeyBinder.shared.bind(with: key, to: { [self] in self.isOn.toggle() })
     }
 }

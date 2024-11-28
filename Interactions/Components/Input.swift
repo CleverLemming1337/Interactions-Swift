@@ -40,12 +40,11 @@ public struct Button: Interaction, Formattable {
 }
 
 public struct TextField: Interaction, Formattable {
-    
     let key: Key
     let label: String
     let placeholder: String
     let showShortcut: Bool
-    let text: Binding<String>
+    @Binding var text: String
     
     @Environment(\.renderer) var renderer
     
@@ -69,7 +68,7 @@ public struct TextField: Interaction, Formattable {
         self.label = label
         self.placeholder = placeholder
         self.showShortcut = showShortcut
-        self.text = text
+        _text = text
         
         @Environment(\.keyBinder) var keyBinder
         
@@ -103,3 +102,34 @@ public struct TextField: Interaction, Formattable {
         }
     }
 }
+
+struct Test: Interaction {
+    @State private var count = 0
+    
+    var body: some Renderable {
+        TestB(count: $count)
+        TestC(count: $count)
+    }
+}
+
+struct TestB: Interaction {
+    @Binding var count: Int
+    
+    var body: some Renderable {
+        Text("\(count)")
+    }
+}
+
+struct TestC: Interaction {
+    @Binding var count: Int
+    
+    var body: some Renderable {
+        Text("\(count)")
+    }
+    
+    init(count: Binding<Int>) {
+        self._count = count
+    }
+}
+
+

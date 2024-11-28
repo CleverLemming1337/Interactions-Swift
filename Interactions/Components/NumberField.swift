@@ -2,7 +2,7 @@ public struct NumberField: Interaction, Formattable {
     let key: Key
     let label: String
     let showShortcut: Bool
-    let number: Binding<Int>
+    @Binding var number: Int
     
     @Environment(\.renderer) var renderer
     
@@ -26,7 +26,7 @@ public struct NumberField: Interaction, Formattable {
         self.key = key
         self.label = label
         self.showShortcut = showShortcut
-        self.number = number
+        _number = number
         
         @Environment(\.keyBinder) var keyBinder
         

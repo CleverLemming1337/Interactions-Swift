@@ -50,7 +50,7 @@ struct Counter: Scene {
             Button(Key.cA, "Count up") {
                 count += 1
             }
-            TextField(.n1, "Your name", placeholder: "Enter your name...", text: text)
+            TextField(.n1, "Your name", placeholder: "Enter your name...", text: $text)
             if text != "" {
                 Text("Hello, \(text)!")
             }
@@ -209,7 +209,7 @@ struct HelloWorld: Interaction {
 
 
 struct MyComponent: Interaction {
-    private var state = Binding(0)
+    @State private var state = 0
     
     var body: some Renderable {
         Text(String(state))
