@@ -39,8 +39,17 @@ public extension Formattable {
     func background(_ color: Color) -> Formattable {
         return Text("\u{001B}[4\(color.value)m\(self.render())\u{001B}[49m")
     }
-    func padding(_ x: UInt = 1, _ y: UInt = 0) -> Formattable {
-        return Text("\(String(repeating: " ", count: Int(x)))\(self.render())\(String(repeating: " ", count: Int(x)))")
+    func padding(_ x: UInt = 1, _ y: UInt = 0, width: UInt16? = nil) -> Formattable {
+        return padding(left: Int(x), right: Int(x), width: width)
+    }
+    func padding(left: Int, right: Int = 0, width originalWidth: UInt16? = nil) -> Formattable {
+        let width = Int((originalWidth ?? AppRenderer.shared.terminalSize.0)) - left - right
+        var lines = [String]()
+        for line in wrapLinesByWords(text: self.render(), width: UInt16(width)).split(separator: "\n") {
+            lines.append("\(String(repeating: " ", count: left))\(line)\(String(repeating: " ", count: right))")
+        }
+        
+        return Text(lines.joined(separator: "\n"))
     }
     func dark() -> Formattable {
         return Text("\u{001B}[2m\(self.render())\u{001B}[22m")
