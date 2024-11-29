@@ -83,6 +83,7 @@ struct SliderDemo: Scene {
     let title = "Slider"
     let value = StateItem(0.0)
     var body: some Renderable {
-        Slider(key: .n1, value: value, label: "Slider")
+        Slider(key: .n1, value: value, label: "Slider", step: 2)
+        Text("Value: \(value.value)")
     }
 }

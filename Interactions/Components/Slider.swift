@@ -62,6 +62,7 @@ public struct Slider: Interaction {
     let min: Double
     let label: String?
     let width: Double
+    let step: Double
     
     public var body: some Renderable {
         HStack(spacing: 0) {
@@ -81,12 +82,13 @@ public struct Slider: Interaction {
         }
     }
     
-    public init(key: Key, value: StateItem<Double>, min: Double = 0, max: Double = 100, label: String? = nil, width: Int? = nil) {
+    public init(key: Key, value: StateItem<Double>, in range: ClosedRange<Int> = 0...100, label: String? = nil, width: Int? = nil, step: Double = 1) {
         self.key = key
         self.value = value
-        self.min = min
-        self.max = max
+        self.min = Double(range.lowerBound)
+        self.max = Double(range.upperBound)
         self.label = label
+        self.step = step
         
         var calculatedWidth = Double(width ?? Int(AppRenderer.shared.terminalSize.0)) - 4 /* 2 for middle, 2 for shortcut padding */ - Double(key.name.count)
         
@@ -95,18 +97,22 @@ public struct Slider: Interaction {
         }
         self.width = calculatedWidth
         
-        KeyBinder.shared.bind(with: key, to: {
+        bind()
+    }
+    
+    func bind() {
+        KeyBinder.shared.bind(with: key, to: { [self] in
             AppRenderer.shared.showCursor()
             var key = readKey()
             while key != .newLine && key != .escape {
                 if key == .arrowLeft {
-                    if value.value > min {
-                        value.value -= 1
+                    if value.value - step >= min {
+                        value.value -= step
                     }
                 }
                 else if key == .arrowRight {
-                    if value.value < max {
-                        value.value += 1
+                    if value.value + step <= max {
+                        value.value += step
                     }
                 }
                 key = readKey()
@@ -114,4 +120,5 @@ public struct Slider: Interaction {
             AppRenderer.shared.hideCursor()
         })
     }
+
 }
