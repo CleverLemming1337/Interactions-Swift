@@ -39,10 +39,10 @@ public extension Formattable {
     func background(_ color: Color) -> Formattable {
         return Text("\u{001B}[4\(color.value)m\(self.render())\u{001B}[49m")
     }
-    func padding(_ x: UInt = 1, _ y: UInt = 0, width: UInt16? = nil) -> Formattable {
+    func padding(_ x: UInt = 1, width: UInt16? = nil) -> Formattable {
         return padding(left: Int(x), right: Int(x), width: width)
     }
-    func padding(left: Int, right: Int = 0, width originalWidth: UInt16? = nil) -> Formattable {
+    func padding(left: Int, right: Int = 1, width originalWidth: UInt16? = nil) -> Formattable {
         let width = Int((originalWidth ?? AppRenderer.shared.terminalSize.0)) - left - right
         var lines = [String]()
         for line in wrapLinesByWords(text: self.render(), width: UInt16(width)).split(separator: "\n") {
@@ -62,6 +62,25 @@ public extension Formattable {
     }
     func underlined() -> Formattable {
         return Text("\u{1b}[4m\(self.render())\u{1b}[24m")
+    }
+    func align(width: UInt16, alignment: Alignment = .center, filling: Character = " ", padding: Int = 0) -> Formattable {
+        let text = self.render()
+        let completePadding = max(0, Int(width) - text.count)
+        let leftPadding = completePadding / 2
+        let rightPadding = completePadding - leftPadding
+
+        let centeredText: String = {
+            switch alignment {
+                case .center:
+                    return String(repeating: filling, count: leftPadding) + text + String(repeating: filling, count: rightPadding)
+                case .leading:
+                    return text + String(repeating: filling, count: completePadding)
+                case .trailing:
+                    return String(repeating: filling, count: completePadding) + text
+            }
+        }()
+        
+        return Text(String(repeating: " ", count: padding)+centeredText+String(repeating: " ", count: padding))
     }
 }
 

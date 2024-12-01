@@ -15,8 +15,9 @@ public struct Table<T>: Interaction {
         for (rowIndex, row) in data.enumerated() {
             HStack {
                 for (index, column) in columns.enumerated() {
-                    Text("\(column.renderCell(row).render(), width: UInt16(columns[index].title.count), alignment: column.alignment)")
-                        .padding()
+                    Text(column.renderCell(row).render())
+                        .align(width: UInt16(columns[index].title.count), alignment: column.alignment, padding: 1)
+                        
                 }
             }
             .background(rowIndex % 2 == 1 ? .color256(238) : .normal)
