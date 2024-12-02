@@ -84,10 +84,11 @@ struct ListDemo: Scene {
     let title = "List"
     
     var body: some Renderable {
-        List {
+        List(.n1) {
             Button("Button") {
                 print("Hello!")
             }
+            Text("Hello!")
         }
     }
 }

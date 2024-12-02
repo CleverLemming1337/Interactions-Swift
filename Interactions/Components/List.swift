@@ -9,26 +9,42 @@ import Foundation
 
 public struct List: Interaction, Activatable {
     let elements: [Renderable]
+    let key: Key
     @State private var selectedIndex = 0
     
     public var body: some Renderable {
+        Text(selectedIndex.description)
         for (index, element) in elements.enumerated() {
             if index == selectedIndex {
-                Text(element.render())
+                if index != elements.count-1 {
+                    Text(element.render())
                     .reversed()
+                        .align(width: AppRenderer.shared.terminalSize.0, alignment: .leading, padding: 1)
+                        .underlined()
+                }
+                else {
+                    Text(element.render())
+                        .reversed()
+                        .align(width: AppRenderer.shared.terminalSize.0, alignment: .leading, padding: 1)
+                }
             }
             else if index != elements.count-1 {
                 Text(element.render())
+                    .align(width: AppRenderer.shared.terminalSize.0, alignment: .leading, padding: 1)
                     .underlined()
             }
             else {
-                element
+                Text(element.render())
+                    .align(width: AppRenderer.shared.terminalSize.0, alignment: .leading, padding: 1)
             }
         }
     }
     
-    public init(@InteractionBuilder _ elements: () -> [Renderable]) {
+    public init(_ key: Key, @InteractionBuilder _ elements: () -> [Renderable]) {
+        self.key = key
         self.elements = elements()
+
+        bindActivation(with: key)
     }
     
     public func activate() {

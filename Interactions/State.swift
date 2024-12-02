@@ -33,20 +33,37 @@ import Foundation
     }
 }
 
+// Add a state storage class
+private class StateStorage: @unchecked Sendable {
+    static let shared = StateStorage()
+    var storage: [String: Any] = [:]
+}
+
 @propertyWrapper public struct State<T> {
-    let binding: Binding<T>
+    let id: String
+    let defaultValue: T
+    
     public init(wrappedValue: T) {
-        self.binding = Binding<T>(wrappedValue)
+        self.defaultValue = wrappedValue
+        // Create unique ID based on file and line where @State is used
+        self.id = "\(#file):\(#line)"
     }
+    
     public var wrappedValue: T {
         get {
-            binding.value
+            if let value = StateStorage.shared.storage[id] as? T {
+                return value
+            }
+            StateStorage.shared.storage[id] = defaultValue
+            return defaultValue
         }
         nonmutating set {
-            binding.value = newValue
+            StateStorage.shared.storage[id] = newValue
+            AppRenderer.shared.renderApp()
         }
     }
+    
     public var projectedValue: Binding<T> {
-        binding
+        Binding(wrappedValue)
     }
 }

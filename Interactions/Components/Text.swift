@@ -64,7 +64,7 @@ public extension Formattable {
         return Text("\u{1b}[4m\(self.render())\u{1b}[24m")
     }
     func align(width: UInt16, alignment: Alignment = .center, filling: Character = " ", padding: Int = 0) -> Formattable {
-        let text = self.render()
+        let text = removeInvisibleCharacters(text: self.render())
         let completePadding = max(0, Int(width) - text.count)
         let leftPadding = completePadding / 2
         let rightPadding = completePadding - leftPadding
