@@ -26,6 +26,13 @@ public struct RawText: Renderable {
     }
 }
 
+// Add this helper function somewhere in the file
+public func stripANSICodes(_ text: String) -> String {
+    // This regex matches ANSI escape sequences
+    let pattern = "\u{001B}\\[.*?m"
+    return text.replacingOccurrences(of: pattern, with: "", options: .regularExpression)
+}
+
 public extension Formattable {
     func bold() -> Formattable {
         return Text("\u{001B}[1m\(self.render())\u{001B}[22m")
@@ -64,7 +71,7 @@ public extension Formattable {
         return Text("\u{1b}[4m\(self.render())\u{1b}[24m")
     }
     func align(width: UInt16, alignment: Alignment = .center, filling: Character = " ", padding: Int = 0) -> Formattable {
-        let text = removeInvisibleCharacters(text: self.render())
+        let text = stripANSICodes(self.render())
         let completePadding = max(0, Int(width) - text.count)
         let leftPadding = completePadding / 2
         let rightPadding = completePadding - leftPadding
