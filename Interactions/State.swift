@@ -51,9 +51,7 @@ import Foundation
     public var wrappedValue: T {
         get {
             if let binding = StateStorage.shared.storage[id] as? Binding<T> {
-                if let value = binding.value as? T {
-                    return value
-                }
+                return binding.value
             }
             StateStorage.shared.storage[id] = Binding(defaultValue)
             return defaultValue
