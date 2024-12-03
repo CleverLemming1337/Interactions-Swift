@@ -39,7 +39,7 @@ import Foundation
     
     public init(wrappedValue: T, file: StaticString = #file, line: UInt = #line) {
         self.defaultValue = wrappedValue
-        // Create unique ID based on file and line where @State is used
+        // Create unique but persistent (=not random) ID based on file and line where @State is used
         self.id = "\(file):\(line)"
 
         StateStorage.shared.storage[id] = Binding(defaultValue)
@@ -47,7 +47,7 @@ import Foundation
     
     public var wrappedValue: T {
         get {
-            if let binding = StateStorage.shared.storage[id] as? Binding {
+            if let binding = StateStorage.shared.storage[id] as? Binding<T> {
                 if let value = binding.value as? T {
                     return value
                 }
@@ -56,12 +56,15 @@ import Foundation
             return defaultValue
         }
         nonmutating set {
-            StateStorage.shared.storage[id]?.value = newValue
+            (StateStorage.shared.storage[id] as? Binding)?.value = newValue
         }
     }
     
     public var projectedValue: Binding<T> {
-        return Binding(defaultValue)
+        if let binding = StateStorage.shared.storage[id] as? Binding<T> {
+            return binding
+        }
+        return Binding<T>(defaultValue)
     }
 
 }
@@ -69,5 +72,7 @@ import Foundation
 
 public class StateStorage: @unchecked Sendable {
     public static let shared = StateStorage()
-    public var storage: [String: Binding<Any>] = [:]
+    public var storage: [String: Any /* Baically Binding<Any>. Binding<Any> can't
+     be converted to Binding<T>, but Any can be converted to both Binding<Any> and Binding<T> */
+     ] = [:]
 }
