@@ -42,7 +42,10 @@ import Foundation
         // Create unique but persistent (=not random) ID based on file and line where @State is used
         self.id = "\(file):\(line)"
 
-        StateStorage.shared.storage[id] = Binding(defaultValue)
+        // Store the binding in the storage if it doesn't exist yet
+        if StateStorage.shared.storage[id] == nil {
+            StateStorage.shared.storage[id] = Binding(defaultValue)
+        }
     }
     
     public var wrappedValue: T {
