@@ -24,8 +24,13 @@ public struct List: Interaction, Activatable {
         for (index, element) in elements.enumerated() {
             HStack(spacing: 0) {
                 if focused && index == selectedIndex {
-                    Text("◆ ")
-                    .underlined()
+                    if let _ = element as? Activatable {
+                        Text("◆ ")
+                            .underlined()
+                    } else {
+                        Text("◇ ")
+                            .underlined()
+                    }
                 }
                 Text(element.render())
                     .align(width: AppRenderer.shared.terminalSize.0 - (focused&&index==selectedIndex ? 2 : 0), alignment: .leading, padding: focused && index == selectedIndex ? 0 : 2)
@@ -56,6 +61,10 @@ public struct List: Interaction, Activatable {
             else if key == .newLine {
                 if let element = elements[selectedIndex] as? Activatable {
                     element.activate()
+                    if let _ = element as? NavigationLink {
+                        focused = false
+                        return // else it would continue capturing input
+                    }
                 }
                 else {
                     bel()
