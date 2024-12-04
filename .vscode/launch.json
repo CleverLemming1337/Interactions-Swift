@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Interactions}",
+            "name": "Debug Interactions-sample-app",
+            "program": "${workspaceFolder:Interactions}/.build/debug/Interactions-sample-app",
+            "preLaunchTask": "swift: Build Debug Interactions-sample-app"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:Interactions}",
+            "name": "Release Interactions-sample-app",
+            "program": "${workspaceFolder:Interactions}/.build/release/Interactions-sample-app",
+            "preLaunchTask": "swift: Build Release Interactions-sample-app"
+        }
+    ]
+}

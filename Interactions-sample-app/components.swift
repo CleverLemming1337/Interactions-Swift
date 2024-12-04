@@ -84,22 +84,26 @@ struct NumberFieldDemo: Scene {
 struct ListDemo: Scene {
     let title = "List"
     @State private var isOn = false
+    @State private var value = 0
     
     var body: some Renderable {
         List(.n1, "List title") {
             Button("Button") {
                 print("Hello!")
             }
-            Text("Hello!")
+            Text("This is just a text.")
             Toggle(isOn: $isOn)
             NavigationLink(label: "NavigationLink", destination: ButtonDemo())
+            Slider(value: $value, in: 0...100, label: "Slider")
         }
+    }
+}
 
 struct SliderDemo: Scene {
     let title = "Slider"
-    let value = StateItem(0.0)
+    @State private var value = 0
     var body: some Renderable {
-        Slider(key: .n1, value: value, label: "Slider", step: 2)
-        Text("Value: \(value.value)")
+        Slider(key: .n1, value: $value, label: "Slider", step: 2)
+        Text("Value: \(value)")
     }
 }
