@@ -26,6 +26,13 @@ public struct RawText: Renderable {
     }
 }
 
+// Add this helper function somewhere in the file
+public func stripANSICodes(_ text: String) -> String {
+    // This regex matches ANSI escape sequences
+    let pattern = "\u{001B}\\[.*?m"
+    return text.replacingOccurrences(of: pattern, with: "", options: .regularExpression)
+}
+
 public extension Formattable {
     func bold() -> Formattable {
         return Text("\u{001B}[1m\(self.render())\u{001B}[22m")
@@ -39,8 +46,17 @@ public extension Formattable {
     func background(_ color: Color) -> Formattable {
         return Text("\u{001B}[4\(color.value)m\(self.render())\u{001B}[49m")
     }
-    func padding(_ x: UInt = 1, _ y: UInt = 0) -> Formattable {
-        return Text("\(String(repeating: " ", count: Int(x)))\(self.render())\(String(repeating: " ", count: Int(x)))")
+    func padding(_ x: UInt = 1, width: UInt16? = nil) -> Formattable {
+        return padding(left: Int(x), right: Int(x), width: width)
+    }
+    func padding(left: Int, right: Int = 1, width originalWidth: UInt16? = nil) -> Formattable {
+        let width = Int((originalWidth ?? AppRenderer.shared.terminalSize.0)) - left - right
+        var lines = [String]()
+        for line in wrapLinesByWords(text: self.render(), width: UInt16(width)).split(separator: "\n") {
+            lines.append("\(String(repeating: " ", count: left))\(line)\(String(repeating: " ", count: right))")
+        }
+        
+        return Text(lines.joined(separator: "\n"))
     }
     func dark() -> Formattable {
         return Text("\u{001B}[2m\(self.render())\u{001B}[22m")
@@ -53,6 +69,34 @@ public extension Formattable {
     }
     func underlined() -> Formattable {
         return Text("\u{1b}[4m\(self.render())\u{1b}[24m")
+    }
+    func align(width inputWidth: UInt16? = nil, alignment: Alignment = .center, filling: Character = " ", padding includedPadding: Int = 0, excludedPadding: Int = 0) -> Formattable {
+        /*
+        ··Text··········
+          |--| Text
+         |------------| width
+         -    - Included padding
+        -              - Excluded padding
+        */
+        let width = inputWidth ?? AppRenderer.shared.terminalSize.0
+        let text = self.render()
+        let length = stripANSICodes(text).count
+        let completePadding = max(0, Int(width) - length - includedPadding*2)
+        let leftPadding = completePadding / 2
+        let rightPadding = completePadding - leftPadding
+
+        let centeredText: String = {
+            switch alignment {
+                case .center:
+                    return String(repeating: filling, count: leftPadding) + text + String(repeating: filling, count: rightPadding)
+                case .leading:
+                    return text + String(repeating: filling, count: completePadding)
+                case .trailing:
+                    return String(repeating: filling, count: completePadding) + text
+            }
+        }()
+        
+        return Text(String(repeating: " ", count: includedPadding+excludedPadding)+centeredText+String(repeating: " ", count: includedPadding+excludedPadding))
     }
 }
 
@@ -71,7 +115,7 @@ public enum Color {
     
     /// Returns the ANSI value of the color as string
     /// Example: red is `\u{1b}[31m`
-    /// `.red.value` would return `"1"` (part between `3` and `m`
+    /// `.red` would return `"1"` (part between `3` and `m`
     var value: String {
         get {
             switch self {

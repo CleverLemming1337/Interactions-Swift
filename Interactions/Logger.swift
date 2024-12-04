@@ -92,21 +92,21 @@ struct LogList: Scene {
     
     let title = "Log"
     
-    let showDebug = StateItem(false)
-    let showInfo = StateItem(true)
-    let showWarning = StateItem(true)
-    let showError = StateItem(true)
-    let showFatal = StateItem(true)
+    @State private var showDebug = false
+    @State private var showInfo = true
+    @State private var showWarning = true
+    @State private var showError = true
+    @State private var showFatal = true
     
     var filteredLogs: [Log] {
         get {
             logger.logs.filter({
                 switch $0.level {
-                case .debug: showDebug.value
-                case .info: showInfo.value
-                case .warning: showWarning.value
-                case .error: showError.value
-                case .fatal: showFatal.value
+                case .debug: showDebug
+                case .info: showInfo
+                case .warning: showWarning
+                case .error: showError
+                case .fatal: showFatal
                 }
             })
         }
@@ -119,21 +119,21 @@ struct LogList: Scene {
         }
         Separator()
         VStack(spacing: 0) {
-            Toggle(label: "Show debug info", key: .n0, isOn: showDebug)
-            Toggle(label: "Show info", key: .n1, isOn: showInfo)
-            Toggle(label: "Show warnings", key: .n2, isOn: showWarning)
-            Toggle(label: "Show errors", key: .n3, isOn: showError)
-            Toggle(label: "Show fatal errors", key: .n4, isOn: showFatal)
+            Toggle(label: "Show debug info", key: .n0, isOn: $showDebug)
+            Toggle(label: "Show info", key: .n1, isOn: $showInfo)
+            Toggle(label: "Show warnings", key: .n2, isOn: $showWarning)
+            Toggle(label: "Show errors", key: .n3, isOn: $showError)
+            Toggle(label: "Show fatal errors", key: .n4, isOn: $showFatal)
         }
         Separator()
         if filteredLogs.count > 0 {
             for log in logger.logs.filter({
                 switch $0.level {
-                case .debug: showDebug.value
-                case .info: showInfo.value
-                case .warning: showWarning.value
-                case .error: showError.value
-                case .fatal: showFatal.value
+                case .debug: showDebug
+                case .info: showInfo
+                case .warning: showWarning
+                case .error: showError
+                case .fatal: showFatal
                 }
             }) {
                 RenderedLog(log: log)

@@ -97,7 +97,7 @@ public extension App {
     /// When quitting the app, raw mode is disabled.
     func run() {
         print("Initializing app...")
-        let original = enableRawMode()
+        _ = enableRawMode()
         AppRenderer.shared.hideCursor()
         
         interceptSignals()
