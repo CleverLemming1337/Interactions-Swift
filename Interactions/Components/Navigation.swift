@@ -15,22 +15,34 @@ public struct MenuOption {
     }
 }
 
-public struct NavigationLink: Interaction {
-    let key: Key
+public struct NavigationLink: Interaction, Activatable {
+    let key: Key?
     let label: String
     let destination: any Renderable
     let title: String
     
-    @Environment(\.renderer) var renderer
     @Environment(\.settings) var settings
     
+    public func activate() {
+        AppRenderer.shared.setScene(destination, title: title)
+    }
     public var body: some Renderable {
-        Button(key, label) {
-            renderer.setScene(destination, title: title)
+        if key != nil {
+            Button(key!, label) {
+                activate()
+            }
+            .tint()
         }
-        .tint(settings.accentColor)
+        else {
+            HStack {
+                Text(label)
+                    .align(width: AppRenderer.shared.terminalSize.0-6, alignment: .leading)
+                Text("❯")
+            }
+        }
     }
     
+    @available(*, deprecated, renamed: "init(key:label:destination:)", message: "Use init(key:label:destination:) instead.")
     public init(key: Key, name: String, title: String = "", @InteractionBuilder _ destination: () -> [Renderable]) {
         self.key = key
         self.label = name
@@ -38,7 +50,7 @@ public struct NavigationLink: Interaction {
         self.destination = destination()
     }
     
-    public init(key: Key, label: String, destination: any Scene) {
+    public init(key: Key? = nil, label: String, destination: any Scene) {
         self.key = key
         self.label = label
         self.title = destination.title

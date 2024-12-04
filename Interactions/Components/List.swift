@@ -10,46 +10,40 @@ import Foundation
 public struct List: Interaction, Activatable {
     let elements: [Renderable]
     let key: Key
+    let title: String
     @State private var selectedIndex = 0
+    @State private var focused = false
     
     public var body: some Renderable {
-        Text(selectedIndex.description)
+        HStack {
+            Text(key.name)
+                .padding()
+                .other("[100m", end: "[49m")
+            Text(title)
+        }
         for (index, element) in elements.enumerated() {
-            if index == selectedIndex {
-                if index != elements.count-1 {
-                    Text(element.render())
-                    .reversed()
-                        .align(width: AppRenderer.shared.terminalSize.0, alignment: .leading, padding: 1)
-                        .underlined()
-                }
-                else {
-                    Text(element.render())
-                        .reversed()
-                        .align(width: AppRenderer.shared.terminalSize.0, alignment: .leading, padding: 1)
-                }
-            }
-            else if index != elements.count-1 {
-                Text(element.render())
-                    .align(width: AppRenderer.shared.terminalSize.0, alignment: .leading, padding: 1)
+            HStack(spacing: 0) {
+                if focused && index == selectedIndex {
+                    Text("◆ ")
                     .underlined()
-            }
-            else {
+                }
                 Text(element.render())
-                    .align(width: AppRenderer.shared.terminalSize.0, alignment: .leading, padding: 1)
+                    .align(width: AppRenderer.shared.terminalSize.0 - (focused&&index==selectedIndex ? 2 : 0), alignment: .leading, padding: focused && index == selectedIndex ? 0 : 2)
+                    .underlined()
             }
         }
     }
     
-    public init(_ key: Key, @InteractionBuilder _ elements: () -> [Renderable]) {
+    public init(_ key: Key, _ title: String = "", @InteractionBuilder _ elements: () -> [Renderable]) {
         self.key = key
+        self.title = title
         self.elements = elements()
 
         bindActivation(with: key)
     }
     
     public func activate() {
-        AppRenderer.shared.showCursor()
-        
+        focused = true
         var key = readKey()
         
         while key != .escape {
@@ -69,5 +63,6 @@ public struct List: Interaction, Activatable {
             }
             key = readKey()
         }
+        focused = false
     }
 }
