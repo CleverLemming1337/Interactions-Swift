@@ -34,30 +34,30 @@ struct About: Scene {
 }
 
 struct Counter: Scene {
-    let count = StateItem(0)
-    let text = StateItem("")
+    @State private var count = 0
+    @State private var text = ""
     
     let title = "State demo"
     
-    let isOn = StateItem(false)
+    @State private var isOn = false
 
     let data = [("A", "a"), ("B", "b")]
     
     var body: some Renderable {
         VStack {
-            ProgressBar(progress: count.value)
-            Text("Counter is at \(count.value)")
+            ProgressBar(progress: count)
+            Text("Counter is at \(count)")
             Button(Key.cA, "Count up") {
-                count.value += 1
+                count += 1
             }
-            TextField(.n1, "Your name", placeholder: "Enter your name...", text: text)
-            if text.value != "" {
-                Text("Hello, \(text.value)!")
+            TextField(.n1, "Your name", placeholder: "Enter your name...", text: $text)
+            if text != "" {
+                Text("Hello, \(text)!")
             }
             else {
                 Text("Press 1 to enter your name")
             }
-            Toggle(label: "Press 2 to toggle me", key: .n2, isOn: isOn)
+            Toggle(label: "Press 2 to toggle me", key: .n2, isOn: $isOn)
         }
     }
 }
@@ -209,10 +209,10 @@ struct HelloWorld: Interaction {
 
 
 struct MyComponent: Interaction {
-    private var state = StateItem(0)
+    @State private var state = 0
     
     var body: some Renderable {
-        Text(String(state.value))
+        Text(String(state))
     }
 }
 

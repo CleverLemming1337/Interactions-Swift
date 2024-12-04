@@ -7,8 +7,12 @@
 
 import Foundation
 
-public struct Button: Interaction, Formattable {
-    let key: Key
+public struct Button: Interaction, Formattable, Activatable {
+    public func activate() {
+        action()
+    }
+    
+    let key: Key?
     let label: String
     let action: () -> Void
     let showShortcut: Bool
@@ -18,34 +22,46 @@ public struct Button: Interaction, Formattable {
         self.label = label
         self.action = action
         self.showShortcut = showShortcut
-        
-        @Environment(\.keyBinder) var keyBinder
-        
-        keyBinder.bind(with: key, to: action)
+
+        bindActivation(with: key)
+    }
+    
+    public init(_ label: String, _ action: @escaping () -> Void) {
+        self.key = nil
+        self.label = label
+        self.action = action
+        self.showShortcut = false
     }
     
     public var body: some Renderable {
-        HStack(spacing: 0) {
-            if showShortcut {
-                Text(key.name)
+        if key != nil {
+            HStack(spacing: 0) {
+                if showShortcut {
+                    Text(key!.name)
+                        .padding()
+                        .other("[100m", end: "[49m")
+                    
+                }
+                Text("\(label)")
                     .padding()
-                    .other("[100m", end: "[49m")
+                    .reversed()
             }
-            Text("\(label)")
-                .padding()
-                .reversed()
+        }
+        else {
+            Text(label)
+                .tint()
+                .bold()
         }
     }
     
 }
 
 public struct TextField: Interaction, Formattable {
-    
     let key: Key
     let label: String
     let placeholder: String
     let showShortcut: Bool
-    let text: StateItem<String>
+    @Binding var text: String
     
     @Environment(\.renderer) var renderer
     
@@ -55,21 +71,21 @@ public struct TextField: Interaction, Formattable {
         while pressedKey != .newLine {
             pressedKey = readKey()
             if pressedKey == .backspace {
-                _ = text.value.popLast()
+                _ = text.popLast()
             }
             else if pressedKey != .newLine && pressedKey != .carriageReturn{
-                text.value += pressedKey.string
+                text += pressedKey.string
             }
         }
         renderer.hideCursor()
     }
     
-    public init(_ key: Key, _ label: String, placeholder: String, text: StateItem<String>, showShortcut: Bool = true) {
+    public init(_ key: Key, _ label: String, placeholder: String, text: Binding<String>, showShortcut: Bool = true) {
         self.key = key
         self.label = label
         self.placeholder = placeholder
         self.showShortcut = showShortcut
-        self.text = text
+        _text = text
         
         @Environment(\.keyBinder) var keyBinder
         
@@ -86,8 +102,8 @@ public struct TextField: Interaction, Formattable {
                     .padding()
                     .other("[100m", end: "[49m")
             }
-            if text.value.count > 0 {
-                Text(text.value)
+            if text.count > 0 {
+                Text(text)
                     .padding()
                     .reversed()
                     .tint()
@@ -103,3 +119,34 @@ public struct TextField: Interaction, Formattable {
         }
     }
 }
+
+struct Test: Interaction {
+    @State private var count = 0
+    
+    var body: some Renderable {
+        TestB(count: $count)
+        TestC(count: $count)
+    }
+}
+
+struct TestB: Interaction {
+    @Binding var count: Int
+    
+    var body: some Renderable {
+        Text("\(count)")
+    }
+}
+
+struct TestC: Interaction {
+    @Binding var count: Int
+    
+    var body: some Renderable {
+        Text("\(count)")
+    }
+    
+    init(count: Binding<Int>) {
+        self._count = count
+    }
+}
+
+

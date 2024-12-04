@@ -9,7 +9,8 @@ struct ComponentList: Scene {
         NavigationLink(key: .n3, label: "TabView", destination: TabDemo())
         NavigationLink(key: .n4, label: "Alert", destination: AlertDemo())
         NavigationLink(key: .n5, label: "NumberField", destination: NumberFieldDemo())
-        NavigationLink(key: .n6, label: "Slider", destination: SliderDemo())
+        NavigationLink(key: .n6, label: "List", destination: ListDemo())
+        NavigationLink(key: .n7, label: "Slider", destination: SliderDemo())
     }
 }
 
@@ -55,29 +56,44 @@ struct TabDemo: Scene {
 
 struct AlertDemo: Scene {
     let title = "Alert"
-    let showAlert = StateItem(false)
+    @State private var showAlert = false
+    
     var body: some Renderable {
         VStack {
             Button(.cD, "Show alert") {
-                showAlert.value = true
+                showAlert = true
             }
             Text("\nThis text will be behind the alert.")
-            Alert(title: "Alert title", text: "Here's to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They’re not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. But the only thing you can’t do is ignore them. Because they change things. They push the human race forward. And while some may see them as the crazy ones, We see genius. Because the people who are crazy enough to think they can change the world, Are the ones who do.", level: .info, isPresented: showAlert)
+            Alert(title: "Alert title", text: "Here's to the crazy ones. The misfits. The rebels. The troublemakers. The round pegs in the square holes. The ones who see things differently. They’re not fond of rules. And they have no respect for the status quo. You can quote them, disagree with them, glorify or vilify them. But the only thing you can’t do is ignore them. Because they change things. They push the human race forward. And while some may see them as the crazy ones, We see genius. Because the people who are crazy enough to think they can change the world, Are the ones who do.", level: .info, isPresented: $showAlert)
         }
     }
 }
 
 struct NumberFieldDemo: Scene {
     let title = "NumberField"
-    let number = StateItem(0)
+    @State private var number = 0
 
     var body: some Renderable {
         VStack {
-            NumberField(.n1, "Enter a number", number: number)
-            Text("Doubled: \(number.value*2)")
+            NumberField(.n1, "Enter a number", number: $number)
+            Text("Doubled: \(number*2)")
         }
     }
 }
+
+struct ListDemo: Scene {
+    let title = "List"
+    @State private var isOn = false
+    
+    var body: some Renderable {
+        List(.n1, "List title") {
+            Button("Button") {
+                print("Hello!")
+            }
+            Text("Hello!")
+            Toggle(isOn: $isOn)
+            NavigationLink(label: "NavigationLink", destination: ButtonDemo())
+        }
 
 struct SliderDemo: Scene {
     let title = "Slider"
