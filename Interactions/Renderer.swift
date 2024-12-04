@@ -95,10 +95,10 @@ public class AppRenderer: @unchecked /* fixes Swift 6 language mode errors */ Se
         var backButton = ""
         if navigationPath.count > 1 {
             if let backTitle = (navigationPath[navigationPath.count-2] as? any Scene)?.title {
-                backButton += "< \(backTitle)"
+                backButton += "❮ \(backTitle)"
             }
             else {
-                backButton = "<"
+                backButton = "❮"
             }
         }
         header += backButton

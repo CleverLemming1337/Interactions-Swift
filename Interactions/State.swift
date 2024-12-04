@@ -34,19 +34,46 @@ import Foundation
 }
 
 @propertyWrapper public struct State<T> {
-    let binding: Binding<T>
-    public init(wrappedValue: T) {
-        self.binding = Binding<T>(wrappedValue)
+    let id: String
+    let defaultValue: T
+    
+    public init(wrappedValue: T, file: StaticString = #file, line: UInt = #line) {
+        self.defaultValue = wrappedValue
+        // Create unique but persistent (=not random) ID based on file and line where @State is used
+        self.id = "\(file):\(line)"
+
+        // Store the binding in the storage if it doesn't exist yet
+        if StateStorage.shared.storage[id] == nil {
+            StateStorage.shared.storage[id] = Binding(defaultValue)
+        }
     }
+    
     public var wrappedValue: T {
         get {
-            binding.value
+            if let binding = StateStorage.shared.storage[id] as? Binding<T> {
+                return binding.value
+            }
+            StateStorage.shared.storage[id] = Binding(defaultValue)
+            return defaultValue
         }
         nonmutating set {
-            binding.value = newValue
+            (StateStorage.shared.storage[id] as? Binding)?.value = newValue
         }
     }
+    
     public var projectedValue: Binding<T> {
-        binding
+        if let binding = StateStorage.shared.storage[id] as? Binding<T> {
+            return binding
+        }
+        return Binding<T>(defaultValue)
     }
+
+}
+
+
+public class StateStorage: @unchecked Sendable {
+    public static let shared = StateStorage()
+    public var storage: [String: Any /* Baically Binding<Any>. Binding<Any> can't
+     be converted to Binding<T>, but Any can be converted to both Binding<Any> and Binding<T> */
+     ] = [:]
 }

@@ -9,6 +9,7 @@ struct ComponentList: Scene {
         NavigationLink(key: .n3, label: "TabView", destination: TabDemo())
         NavigationLink(key: .n4, label: "Alert", destination: AlertDemo())
         NavigationLink(key: .n5, label: "NumberField", destination: NumberFieldDemo())
+        NavigationLink(key: .n6, label: "List", destination: ListDemo())
     }
 }
 
@@ -75,6 +76,22 @@ struct NumberFieldDemo: Scene {
         VStack {
             NumberField(.n1, "Enter a number", number: $number)
             Text("Doubled: \(number*2)")
+        }
+    }
+}
+
+struct ListDemo: Scene {
+    let title = "List"
+    @State private var isOn = false
+    
+    var body: some Renderable {
+        List(.n1, "List title") {
+            Button("Button") {
+                print("Hello!")
+            }
+            Text("Hello!")
+            Toggle(isOn: $isOn)
+            NavigationLink(label: "NavigationLink", destination: ButtonDemo())
         }
     }
 }

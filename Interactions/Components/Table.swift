@@ -16,7 +16,7 @@ public struct Table<T>: Interaction {
             HStack {
                 for (index, column) in columns.enumerated() {
                     Text(column.renderCell(row).render())
-                        .align(width: UInt16(columns[index].title.count), alignment: column.alignment, padding: 1)
+                        .align(width: UInt16(columns[index].title.count), alignment: column.alignment, excludedPadding: 1)
                         
                 }
             }

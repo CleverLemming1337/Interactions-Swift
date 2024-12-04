@@ -1,7 +1,7 @@
 import Foundation
 
 public func bel() {
-    print("\u{07}")
+    print("\u{07}", terminator: "")
 }
 
 public struct BEL: Renderable {

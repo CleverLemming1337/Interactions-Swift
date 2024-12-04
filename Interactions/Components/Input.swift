@@ -7,8 +7,12 @@
 
 import Foundation
 
-public struct Button: Interaction, Formattable {
-    let key: Key
+public struct Button: Interaction, Formattable, Activatable {
+    public func activate() {
+        action()
+    }
+    
+    let key: Key?
     let label: String
     let action: () -> Void
     let showShortcut: Bool
@@ -18,22 +22,35 @@ public struct Button: Interaction, Formattable {
         self.label = label
         self.action = action
         self.showShortcut = showShortcut
-        
-        @Environment(\.keyBinder) var keyBinder
-        
-        keyBinder.bind(with: key, to: action)
+
+        bindActivation(with: key)
+    }
+    
+    public init(_ label: String, _ action: @escaping () -> Void) {
+        self.key = nil
+        self.label = label
+        self.action = action
+        self.showShortcut = false
     }
     
     public var body: some Renderable {
-        HStack(spacing: 0) {
-            if showShortcut {
-                Text(key.name)
+        if key != nil {
+            HStack(spacing: 0) {
+                if showShortcut {
+                    Text(key!.name)
+                        .padding()
+                        .other("[100m", end: "[49m")
+                    
+                }
+                Text("\(label)")
                     .padding()
-                    .other("[100m", end: "[49m")
+                    .reversed()
             }
-            Text("\(label)")
-                .padding()
-                .reversed()
+        }
+        else {
+            Text(label)
+                .tint()
+                .bold()
         }
     }
     
