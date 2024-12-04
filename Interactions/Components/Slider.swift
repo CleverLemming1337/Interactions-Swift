@@ -2,7 +2,8 @@ import Foundation
 
 public struct Slider: Interaction {
     let key: Key
-    @Binding var value: Double
+    @Binding var value: Int
+    // use Double for divisions
     let max: Double
     let min: Double
     let label: String?
@@ -17,17 +18,17 @@ public struct Slider: Interaction {
             Text(key.name)
                 .padding()
                 .other("[100m", end: "[49m")
-            Text(String(repeating: " ", count: Int( ((value > max ? max : value)*width/max).rounded(.down) )))
+            Text(String(repeating: " ", count: Int( ((Double(value) > max ? max : Double(value))*width/max).rounded(.down) )))
                 .reversed()
                 .tint()
             Text("  ")
                 .reversed()
-            Text(String(repeating: " ", count: Int( ((value > max ? 0 : max-value)*width/max).rounded(.up) )))
+            Text(String(repeating: " ", count: Int( ((Double(value) > max ? 0 : max-Double(value))*width/max).rounded(.up) )))
                 .other("[100m", end: "[49m")
         }
     }
     
-    public init(key: Key, value: Binding<Double>, in range: ClosedRange<Int> = 0...100, label: String? = nil, width: Int? = nil, step: Double = 1) {
+    public init(key: Key, value: Binding<Int>, in range: ClosedRange<Int> = 0...100, label: String? = nil, width: Int? = nil, step: Double = 1) {
         self.key = key
         self._value = value
         self.min = Double(range.lowerBound)
@@ -51,13 +52,13 @@ public struct Slider: Interaction {
             var key = readKey()
             while key != .newLine && key != .escape {
                 if key == .arrowLeft {
-                    if value - step >= min {
-                        value -= step
+                    if Double(value) - step >= min {
+                        value -= Int(step)
                     }
                 }
                 else if key == .arrowRight {
-                    if value + step <= max {
-                        value += step
+                    if Double(value) + step <= max {
+                        value += Int(step)
                     }
                 }
                 key = readKey()

@@ -99,7 +99,7 @@ struct ListDemo: Scene {
 
 struct SliderDemo: Scene {
     let title = "Slider"
-    @State private var value = 0.0
+    @State private var value = 0
     var body: some Renderable {
         Slider(key: .n1, value: $value, label: "Slider", step: 2)
         Text("Value: \(value)")
