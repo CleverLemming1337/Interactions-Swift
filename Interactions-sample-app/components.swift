@@ -10,6 +10,7 @@ struct ComponentList: Scene {
         NavigationLink(key: .n4, label: "Alert", destination: AlertDemo())
         NavigationLink(key: .n5, label: "NumberField", destination: NumberFieldDemo())
         NavigationLink(key: .n6, label: "List", destination: ListDemo())
+        NavigationLink(key: .n7, label: "Slider", destination: SliderDemo())
     }
 }
 
@@ -93,5 +94,12 @@ struct ListDemo: Scene {
             Toggle(isOn: $isOn)
             NavigationLink(label: "NavigationLink", destination: ButtonDemo())
         }
+
+struct SliderDemo: Scene {
+    let title = "Slider"
+    let value = StateItem(0.0)
+    var body: some Renderable {
+        Slider(key: .n1, value: value, label: "Slider", step: 2)
+        Text("Value: \(value.value)")
     }
 }
