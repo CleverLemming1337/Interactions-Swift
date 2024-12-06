@@ -44,7 +44,10 @@ public extension Interaction {
         return component
     }
     static func buildArray(_ components: [[Renderable]]) -> [Renderable] {
-        return components.flatMap { $0 }
+        return components.compactMap { $0 }
+    }
+    static func buildArray(_ components: [Renderable]) -> Renderable {
+        return components.compactMap { $0 }
     }
     static public func buildOptional(_ component: [Renderable]?) -> [Renderable] {
         return component ?? []

@@ -203,43 +203,34 @@ struct HelloWorld: Interaction {
         NavigationLink(key: .n2, label: "Scroll demo", destination: ScrollDemo())
         Separator()
         NavigationLink(key: .n3, label: "Components", destination: ComponentList())
+        NavigationLink(key: .n4, label: "Color", destination: ColorDemo())
     }
 }
 
+struct ColorDemo: Scene {
+    let title = "Color"
 
-
-struct MyComponent: Interaction {
-    @State private var state = 0
-    
-    var body: some Renderable {
-        Text(String(state))
-    }
-}
-
-
-
-struct MyApp: App {
-    let title = "Hello, World!"
-
-    let settings = AppSettings(
-        name: "My first Interactions app",
-        accentColor: .green
-    )
+    @State private var r = 0
+    @State private var g = 0
+    @State private var b = 0
 
     var body: some Renderable {
-        Text("Hello, world!")
-        Button(.cA, "Press me!") {
-            print("Hurray!")
+        VStack {
+            ForEach(Array(0...255), separator: " ") { color in
+                Text("\(color)")
+                    .tint(.color256(UInt8(color)))
+            }
+            VStack(spacing: 0) {
+                List(.n1, "RGB colors") {
+                    Slider(value: $r, in: 0...255, label: "Red:   ")
+                    Slider(value: $g, in: 0...255, label: "Green: ")
+                    Slider(value: $b, in: 0...255, label: "Blue:  ")
+                }
+            }
+            Text("Red: \(r), Green: \(g), Blue: \(b)")
+            Text("   ")
+                .background(.rgb(UInt8(r), UInt8(g), UInt8(b)))
         }
-        NavigationLink(key: .n1, label: "Press me to navigate", destination: SecondScene())
-    }
-}
-
-struct SecondScene: Scene {
-    let title = "Second scene"
-
-    var body: some Renderable {
-        SwiftLogo()
     }
 }
 
