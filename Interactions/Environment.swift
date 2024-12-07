@@ -6,49 +6,41 @@
 //
 
 import Foundation
+import Dependencies
 
-public class EnvironmentProvider: @unchecked Sendable {
-    public static let shared = EnvironmentProvider()
-    
-    public let renderer = AppRenderer.shared
-    public let keyBinder = KeyBinder.shared
-    public let logger = Logger.shared
-    public private(set) var settings: AppSettings = AppSettings(set: false)
-    public let rerender = AppRenderer.shared.renderApp
-    
-    public var terminalSize: (UInt16, UInt16) {
-        get {
-            AppRenderer.shared.terminalSize
-        }
-    }
-    public var tabIndex: Int {
-        get {
-            TabManager.shared.tabIndex
-        }
-        set {
-            TabManager.shared.tabIndex = newValue
-        }
-    }
-    
-    func setSettings(_ settings: AppSettings) {
-        self.settings = settings
-    }
-    
-    public var dismiss = {
-        AppRenderer.shared.back()
+public typealias Environment = Dependency
+
+public extension DependencyValues {
+    var accentColor: Color {
+        get { self[AccentColorKey.self] }
+        set { self[AccentColorKey.self] = newValue }
     }
 }
 
-@propertyWrapper public struct Environment<T> {
-    let path: KeyPath<EnvironmentProvider, T>
-    
-    public init(_ path: KeyPath<EnvironmentProvider, T>) {
-        self.path = path
-    }
-    
-    public var wrappedValue: T {
-        get {
-            return EnvironmentProvider.shared[keyPath: path]
+private enum AccentColorKey: DependencyKey {
+    static let liveValue: Color = .cyan
+    static let testValue: Color = .red
+}
+
+public extension Renderable {
+    func environment<T>(_ path: WritableKeyPath<DependencyValues, T>, _ value: T) -> some Renderable {
+        DependencyWrapper(content: self) {
+            $0[keyPath: path] = value
         }
     }
 }
+
+private struct DependencyWrapper<Content: Renderable>: Renderable {
+    let content: Content
+    let modify: (inout DependencyValues) -> Void
+    
+    func render() -> String {
+        withDependencies {
+            modify(&$0)
+        } operation: {
+            content.render()
+        }
+    }
+}
+
+public typealias Hook = @Sendable () -> Void

@@ -26,7 +26,7 @@ public struct TabItem: Scene {
 public struct TabView: Interaction {
     let tabs: [TabItem]
     
-    @Environment(\.tabIndex) var tabIndex
+    @LegacyEnvironment(\.tabIndex) var tabIndex
     
     public var body: some Renderable {
         HStack {

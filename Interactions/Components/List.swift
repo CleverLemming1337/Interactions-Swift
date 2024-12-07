@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Dependencies
 
 public struct List: Interaction, Activatable {
     let elements: [Renderable]
@@ -13,6 +14,7 @@ public struct List: Interaction, Activatable {
     let title: String
     @State private var selectedIndex = 0
     @State private var focused = false
+    @Environment(\.accentColor) var accentColor
     
     public var body: some Renderable {
         HStack {
@@ -20,6 +22,7 @@ public struct List: Interaction, Activatable {
                 .padding()
                 .other("[100m", end: "[49m")
             Text(title)
+            Text("\(accentColor)")
         }
         for (index, element) in elements.enumerated() {
             HStack(spacing: 0) {

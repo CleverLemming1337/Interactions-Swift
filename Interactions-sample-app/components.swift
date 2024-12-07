@@ -96,6 +96,7 @@ struct ListDemo: Scene {
             NavigationLink(label: "NavigationLink", destination: ButtonDemo())
             Slider(value: $value, in: 0...100, label: "Slider")
         }
+        .environment(\.accentColor, .red)
     }
 }
 

@@ -12,11 +12,18 @@ let package = Package(
             targets: ["Interactions"]
         ),
     ],
-    dependencies: [],
+    dependencies: [
+        .package(
+            url: "https://github.com/pointfreeco/swift-dependencies",
+            from: "1.0.0"
+        ),
+    ],
     targets: [
         .target(
             name: "Interactions",
-            dependencies: [],
+            dependencies: [
+                .product(name: "Dependencies", package: "swift-dependencies")
+            ],
             path: "Interactions"
         ),
         .testTarget(

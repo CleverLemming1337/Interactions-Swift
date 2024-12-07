@@ -63,7 +63,7 @@ public struct TextField: Interaction, Formattable {
     let showShortcut: Bool
     @Binding var text: String
     
-    @Environment(\.renderer) var renderer
+    @LegacyEnvironment(\.renderer) var renderer
     
     public func focus() {
         renderer.showCursor()
@@ -87,7 +87,7 @@ public struct TextField: Interaction, Formattable {
         self.showShortcut = showShortcut
         _text = text
         
-        @Environment(\.keyBinder) var keyBinder
+        @LegacyEnvironment(\.keyBinder) var keyBinder
         
         keyBinder.bind(with: key, to: focus)
     }
