@@ -15,11 +15,21 @@ public extension DependencyValues {
         get { self[AccentColorKey.self] }
         set { self[AccentColorKey.self] = newValue }
     }
+    
+    var dismiss: Hook {
+        get { self[DismissKey.self] }
+        set { self[DismissKey.self] = newValue }
+    }
 }
 
 private enum AccentColorKey: DependencyKey {
     static let liveValue: Color = .cyan
     static let testValue: Color = .red
+}
+
+private enum DismissKey: DependencyKey {
+    static let liveValue: Hook = { AppRenderer.shared.back() }
+    static let testValue: Hook = { AppRenderer.shared.back() }
 }
 
 public extension Renderable {
