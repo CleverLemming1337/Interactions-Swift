@@ -40,8 +40,9 @@ public extension Formattable {
     func reversed() -> Formattable {
         return Text("\u{001B}[7m\(self.render())\u{001B}[27m")
     }
-    func tint(_ color: Color = EnvironmentProvider.shared.settings.accentColor) -> Formattable {
-        return Text("\u{001B}[3\(color.value)m\(self.render())\u{001B}[39m")
+    func tint(_ color: Color? = nil) -> Formattable {
+        @Environment(\.accentColor) var accentColor
+        return Text("\u{001B}[3\(color?.value ?? accentColor.value)m\(self.render())\u{001B}[39m")
     }
     func background(_ color: Color) -> Formattable {
         return Text("\u{001B}[4\(color.value)m\(self.render())\u{001B}[49m")
@@ -100,7 +101,7 @@ public extension Formattable {
     }
 }
 
-public enum Color {
+public enum Color: Sendable {
     case black
     case red
     case green

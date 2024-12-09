@@ -81,7 +81,7 @@ public struct Alert: Interaction {
     }
     
     public init(title: String, text: String, level: LogLevel, isPresented: Binding<Bool>) {
-        @Environment(\.terminalSize) var terminalSize
+        @LegacyEnvironment(\.terminalSize) var terminalSize
         self.x = 5
         self.y = 5
         self.width = terminalSize.0-6

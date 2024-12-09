@@ -4,7 +4,7 @@ public struct NumberField: Interaction, Formattable {
     let showShortcut: Bool
     @Binding var number: Int
     
-    @Environment(\.renderer) var renderer
+    @LegacyEnvironment(\.renderer) var renderer
     
     public func focus() {
         let allowedKeys: [Key] = [.n1, .n2, .n3, .n4, .n5, .n6, .n7, .n8, .n9, .n0]
@@ -28,7 +28,7 @@ public struct NumberField: Interaction, Formattable {
         self.showShortcut = showShortcut
         _number = number
         
-        @Environment(\.keyBinder) var keyBinder
+        @LegacyEnvironment(\.keyBinder) var keyBinder
         
         keyBinder.bind(with: key, to: focus)
     }

@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Dependencies
 
 public struct List: Interaction, Activatable {
     let elements: [Renderable]

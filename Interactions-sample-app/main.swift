@@ -23,7 +23,7 @@ struct InteractionsSampleApp: App {
 }
 
 struct About: Scene {
-    @Environment(\.settings) var settings
+    @LegacyEnvironment(\.settings) var settings
     
     let title = "About this app"
     
@@ -172,9 +172,9 @@ struct ScrollDemo: Scene {
     }
 }
 struct HelloWorld: Interaction {
-    @Environment(\.logger) var logger
-    @Environment(\.terminalSize) var terminalSize
-    @Environment(\.settings) var settings
+    @LegacyEnvironment(\.logger) var logger
+    @LegacyEnvironment(\.terminalSize) var terminalSize
+    @LegacyEnvironment(\.settings) var settings
     
 
     var body: some Renderable {
