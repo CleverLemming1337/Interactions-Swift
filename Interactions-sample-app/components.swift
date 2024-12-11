@@ -97,7 +97,9 @@ struct ListDemo: Scene {
             Slider(value: $value, in: 0...100, label: "Slider")
         }
         NavigationStack {
-            NewNavigationLink(key: .n2, label: "Navigate", destination: ListDemo())
+            List(.n2) {
+                NewNavigationLink(label: "Navigate", destination: ListDemo())
+            }
         }
     }
 }

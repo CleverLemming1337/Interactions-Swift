@@ -21,7 +21,12 @@ public extension DependencyValues {
         set { self[DismissKey.self] = newValue }
     }
     
-    var navigationPath: NavigationPath {
+    var navigate: @Sendable (Renderable) -> () {
+        get { self[NavigateKey.self] }
+        set { self[NavigateKey.self] = newValue }
+    }
+    
+    var navigationPathId: String {
         get { self[NavigationPathKey.self] }
         set { self[NavigationPathKey.self] = newValue }
     }
@@ -37,9 +42,14 @@ private enum DismissKey: DependencyKey {
     static let testValue: Hook = { AppRenderer.shared.back() }
 }
 
+private enum NavigateKey: DependencyKey {
+    static let liveValue: @Sendable (Renderable) -> () = { AppRenderer.shared.setScene($0) }
+    static let testValue: @Sendable (Renderable) -> () = { AppRenderer.shared.setScene($0) }
+}
+
 private enum NavigationPathKey: DependencyKey {
-    static let liveValue: NavigationPath = NavigationPath() // TODO: Edit renderer
-    static let testValue: NavigationPath = NavigationPath() // TODO: Edit renderer
+    static let liveValue: String = "ERROR"
+    static let testValue: String = "ERROR"
 }
 
 public extension Renderable {

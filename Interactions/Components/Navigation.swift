@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Dependencies
 
 public struct MenuOption {
     let name: String
@@ -21,15 +22,22 @@ public struct NewNavigationLink: Interaction, Activatable {
     let title: String
     
     @LegacyEnvironment(\.settings) var settings
-    @Environment(\.navigationPath) var navigationPath
+    @Environment(\.navigate) var navigate
     
     public func activate() {
-        navigationPath.navigate(to: destination)
+        let currentNavigate = navigate
+                
+        withDependencies {
+            $0.navigate = currentNavigate  // Use the captured value
+        } operation: {
+            currentNavigate(destination)  // Call the captured function directly
+        }
     }
+    
     public var body: some Renderable {
         if key != nil {
             Button(key!, label) {
-                activate()
+               activate()
             }
             .tint()
         }
@@ -117,20 +125,20 @@ public class NavigationPath: @unchecked Sendable {
     }
 }
 public struct NavigationStack: Interaction, @unchecked Sendable {
-    let path = NavigationPath()
-    @State private var count = 0
+    @State private var navigationPath = [Renderable]()
     let content: Renderable
     
     public var body: some Renderable {
-        if let displayed = path.displayed() {
-            displayed
-                .environment(\.accentColor, .red)
-                .environment(\.navigationPath, path)
+        let navigate: @Sendable (Renderable) -> Void = { destination in
+            navigationPath.append(destination)
         }
-        else {
+        
+        if let displayed = navigationPath.last {
+            displayed
+                .environment(\.navigate, navigate)
+        } else {
             content
-                .environment(\.accentColor, .red)
-                .environment(\.navigationPath, path)
+                .environment(\.navigate, navigate)
         }
     }
     
