@@ -4,7 +4,8 @@ public struct ForEach<T>: Interaction {
     let separator: String
 
     public var body: some Renderable {
-        Text(wrapLinesByWords(text: data.map { buildComponent($0).render() }.joined(separator: separator), width: AppRenderer.shared.terminalSize.0*5))
+        Text(data.map { buildComponent($0).render() }.joined(separator: separator))
+            .align(alignment: .leading)
     }
 
     public init(_ data: [T], separator: String = "\n", @InteractionBuilder _ buildComponent: @escaping (T) -> Renderable) {
