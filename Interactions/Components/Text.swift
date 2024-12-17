@@ -237,7 +237,7 @@ public func wrapLines(text: String, width: UInt16) -> String {
 }
 
 func wrapLineByWords(line: String, width: UInt16) -> [String] {
-    if line.trimmingCharacters(in: .whitespaces).count < width {
+    if stripANSICodes(line).trimmingCharacters(in: .whitespaces).count < width {
         return [line.trimmingCharacters(in: .whitespacesAndNewlines)]
     }
     
@@ -249,11 +249,11 @@ func wrapLineByWords(line: String, width: UInt16) -> [String] {
             newLine = String(word)
             continue
         }
-        if word.count > width {
+        if stripANSICodes(String(word)).count > width {
             result.append(contentsOf: wrapLine(line: String(word), width: width))
             continue
         }
-        if (newLine+" "+word).count > width {
+        if stripANSICodes(newLine+" "+word).count > width {
             result.append(newLine)
             newLine = String(word)
             continue
