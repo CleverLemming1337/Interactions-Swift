@@ -20,16 +20,6 @@ public extension DependencyValues {
         get { self[DismissKey.self] }
         set { self[DismissKey.self] = newValue }
     }
-    
-    var navigate: @Sendable (Renderable) -> () {
-        get { self[NavigateKey.self] }
-        set { self[NavigateKey.self] = newValue }
-    }
-    
-    var navigationPathId: String {
-        get { self[NavigationPathKey.self] }
-        set { self[NavigationPathKey.self] = newValue }
-    }
 }
 
 private enum AccentColorKey: DependencyKey {
@@ -42,16 +32,6 @@ private enum DismissKey: DependencyKey {
     static let testValue: Hook = { AppRenderer.shared.back() }
 }
 
-private enum NavigateKey: DependencyKey {
-    static let liveValue: @Sendable (Renderable) -> () = { AppRenderer.shared.setScene($0) }
-    static let testValue: @Sendable (Renderable) -> () = { AppRenderer.shared.setScene($0) }
-}
-
-private enum NavigationPathKey: DependencyKey {
-    static let liveValue: String = "ERROR"
-    static let testValue: String = "ERROR"
-}
-
 public extension Renderable {
     func environment<T>(_ path: WritableKeyPath<DependencyValues, T>, _ value: T) -> some Renderable {
         DependencyWrapper(content: self) {
@@ -60,7 +40,7 @@ public extension Renderable {
     }
 }
 
-struct DependencyWrapper<Content: Renderable>: Renderable {
+private struct DependencyWrapper<Content: Renderable>: Renderable {
     let content: Content
     let modify: (inout DependencyValues) -> Void
     

@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import Dependencies
 
 @propertyWrapper struct InternalState<T> {
     let id: String
