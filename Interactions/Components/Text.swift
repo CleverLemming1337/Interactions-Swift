@@ -70,7 +70,7 @@ public extension Formattable {
     func underlined() -> Formattable {
         return Text("\u{1b}[4m\(self.render())\u{1b}[24m")
     }
-    func align(width inputWidth: UInt16? = nil, alignment: Alignment = .center, filling: Character = " ", padding includedPadding: Int = 0, excludedPadding: Int = 0) -> Formattable {
+    func align(width inputWidth: UInt16? = nil, alignment: Alignment = .center, filling: Character = " ", padding includedPadding: Int = 0, margin: Int = 0) -> Formattable {
         /*
         ··Text··········
           |--| Text
@@ -96,7 +96,7 @@ public extension Formattable {
             }
         }()
         
-        return Text(String(repeating: " ", count: includedPadding+excludedPadding)+centeredText+String(repeating: " ", count: includedPadding+excludedPadding))
+        return Text(String(repeating: " ", count: includedPadding+margin)+centeredText+String(repeating: " ", count: includedPadding+margin))
     }
 }
 
