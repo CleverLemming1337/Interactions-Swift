@@ -44,7 +44,10 @@ public extension Interaction {
         return component
     }
     static func buildArray(_ components: [[Renderable]]) -> [Renderable] {
-        return components.flatMap { $0 }
+        return components.compactMap { $0 }
+    }
+    static func buildArray(_ components: [Renderable]) -> Renderable {
+        return components.compactMap { $0 }
     }
     static public func buildOptional(_ component: [Renderable]?) -> [Renderable] {
         return component ?? []
@@ -106,7 +109,7 @@ public extension App {
         AppRenderer.shared.setScene(self)
         AppRenderer.shared.renderApp()
         
-        @Environment(\.dismiss) var dismiss
+        @LegacyEnvironment(\.dismiss) var dismiss
         
         while true {
             let key = readKey()
@@ -133,7 +136,7 @@ public extension App {
 }
 
 /// Provides global information about the app, such as name, version and accent color
-public struct AppSettings {
+public struct AppSettings: Sendable {
     /// Name of the app
     public let name: String
     /// Version of the app
@@ -151,8 +154,8 @@ public struct AppSettings {
         self.version = version
         self.accentColor = accentColor
         
-        if set {
-            EnvironmentProvider.shared.setSettings(self)
-        }
+//        if set {
+//            EnvironmentProvider.shared.setSettings(self)
+//        }
     }
 }

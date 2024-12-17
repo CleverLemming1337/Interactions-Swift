@@ -73,7 +73,7 @@ import Foundation
 
 public class StateStorage: @unchecked Sendable {
     public static let shared = StateStorage()
-    public var storage: [String: Any /* Baically Binding<Any>. Binding<Any> can't
+    public var storage: [String: Any /* Basically Binding<Any>. Binding<Any> can't
      be converted to Binding<T>, but Any can be converted to both Binding<Any> and Binding<T> */
      ] = [:]
 }

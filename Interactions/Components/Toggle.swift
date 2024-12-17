@@ -12,7 +12,7 @@ public struct Toggle: Interaction, Activatable {
     let key: Key?
     @Binding var isOn: Bool
     
-    @Environment(\.terminalSize) var terminalSize
+    @LegacyEnvironment(\.terminalSize) var terminalSize
     
     public var body: some Renderable {
         HStack(spacing: 0) {

@@ -87,8 +87,8 @@ struct RenderedLog: Interaction {
     }
 }
 struct LogList: Scene {
-    @Environment(\.logger) var logger
-    @Environment(\.rerender) var rerender
+    @LegacyEnvironment(\.logger) var logger
+    @LegacyEnvironment(\.rerender) var rerender
     
     let title = "Log"
     

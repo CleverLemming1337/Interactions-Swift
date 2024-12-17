@@ -2,17 +2,53 @@
 //  File.swift
 //  Interactions
 //
-//  Created by Leonard Fekete on 02.12.24.
+//  Created by CleverLemming1337 on 02.12.24.
 //
 
 import Foundation
+
+@propertyWrapper struct InternalState<T> {
+    let id: String
+    let defaultValue: T
+    
+    init(wrappedValue: T, id: String = "") {
+        self.defaultValue = wrappedValue
+        self.id = id
+
+        // Store the binding in the storage if it doesn't exist yet
+        if id != "" && StateStorage.shared.storage[id] == nil {
+            StateStorage.shared.storage[id] = Binding(defaultValue)
+        }
+    }
+    
+    var wrappedValue: T {
+        get {
+            if let binding = StateStorage.shared.storage[id] as? Binding<T> {
+                return binding.value
+            }
+            StateStorage.shared.storage[id] = Binding(defaultValue)
+            return defaultValue
+        }
+        nonmutating set {
+            (StateStorage.shared.storage[id] as? Binding)?.value = newValue
+        }
+    }
+    
+    var projectedValue: Binding<T> {
+        if let binding = StateStorage.shared.storage[id] as? Binding<T> {
+            return binding
+        }
+        return Binding<T>(defaultValue)
+    }
+}
+
 
 public struct List: Interaction, Activatable {
     let elements: [Renderable]
     let key: Key
     let title: String
-    @State private var selectedIndex = 0
-    @State private var focused = false
+    @InternalState private var selectedIndex: Int
+    @InternalState private var focused: Bool
     
     public var body: some Renderable {
         HStack {
@@ -39,11 +75,17 @@ public struct List: Interaction, Activatable {
         }
     }
     
-    public init(_ key: Key, _ title: String = "", @InteractionBuilder _ elements: () -> [Renderable]) {
+    public init(_ key: Key, _ title: String = "", @InteractionBuilder _ elements: () -> [Renderable], file: StaticString = #file, line: Int = #line) {
         self.key = key
         self.title = title
         self.elements = elements()
 
+        // workaround because states of multiple lists would have the same id
+        @InternalState(id: "\(file):\(line)#1") var focused = false
+        @InternalState(id: "\(file):\(line)#2") var selectedIndex = 0
+
+        self._focused = _focused
+        self._selectedIndex = _selectedIndex
         bindActivation(with: key)
     }
     

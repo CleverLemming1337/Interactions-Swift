@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Dependencies
 
 public struct MenuOption {
     let name: String
@@ -21,7 +22,7 @@ public struct NavigationLink: Interaction, Activatable {
     let destination: any Renderable
     let title: String
     
-    @Environment(\.settings) var settings
+    @LegacyEnvironment(\.settings) var settings
     
     public func activate() {
         AppRenderer.shared.setScene(destination, title: title)
@@ -60,8 +61,8 @@ public struct NavigationLink: Interaction, Activatable {
 
 @available(*, deprecated, renamed: "NavigationLink", message: "Use NavigationLink instead")
 public struct Navigation: Interaction {
-    @Environment(\.keyBinder) var keyBinder
-    @Environment(\.renderer) var renderer
+    @LegacyEnvironment(\.keyBinder) var keyBinder
+    @LegacyEnvironment(\.renderer) var renderer
     
     let options: [MenuOption]
     public var body: some Renderable {
