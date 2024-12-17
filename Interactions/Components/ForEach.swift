@@ -5,7 +5,7 @@ public struct ForEach<T>: Interaction {
 
     public var body: some Renderable {
         Text(data.map { buildComponent($0).render() }.joined(separator: separator))
-            .padding(left: 0, right: 0)
+            .align(alignment: .leading)
     }
 
     public init(_ data: [T], separator: String = "\n", @InteractionBuilder _ buildComponent: @escaping (T) -> Renderable) {

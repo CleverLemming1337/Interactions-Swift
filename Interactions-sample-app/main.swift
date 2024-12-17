@@ -219,6 +219,7 @@ struct ColorDemo: Scene {
             ForEach(Array(0...255), separator: " ") { color in
                 Text("\(color)")
                     .tint(.color256(UInt8(color)))
+                    .align(width: 3, alignment: .trailing)
             }
             VStack(spacing: 0) {
                 List(.n1, "RGB colors") {

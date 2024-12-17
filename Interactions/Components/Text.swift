@@ -7,9 +7,6 @@
 
 import Foundation
 
-public protocol Formattable: Renderable {
-}
-
 public struct RawText: Renderable {
     public let text: String
     

@@ -1,3 +1,7 @@
+import Foundation
+
+public protocol Formattable: Renderable {
+}
 
 public extension Formattable {
     func bold() -> Formattable {
@@ -37,7 +41,7 @@ public extension Formattable {
     func underlined() -> Formattable {
         return Text("\u{1b}[4m\(self.render())\u{1b}[24m")
     }
-    func align(width inputWidth: UInt16? = nil, alignment: Alignment = .center, filling: Character = " ", padding includedPadding: Int = 0, margin: Int = 0) -> Formattable {
+    func align(width inputWidth: UInt16? = nil, alignment: Alignment = .center, filling: Character = "\u{A0}", padding includedPadding: Int = 0, margin: Int = 0) -> Formattable {
         /*
         ··Text··········
           |--| Text
@@ -46,7 +50,7 @@ public extension Formattable {
         -              - Excluded padding
         */
         let width = inputWidth ?? AppRenderer.shared.terminalSize.0
-        let text = self.render()
+        let text = wrapLinesByWords(text: self.render(), width: width)
         let length = stripANSICodes(text).count
         let completePadding = max(0, Int(width) - length - includedPadding*2)
         let leftPadding = completePadding / 2
@@ -63,7 +67,7 @@ public extension Formattable {
             }
         }()
         
-        return Text(String(repeating: " ", count: includedPadding+margin)+centeredText+String(repeating: " ", count: includedPadding+margin))
+        return Text(String(repeating: " ", count: includedPadding+margin)+centeredText+String(repeating: " ", count: includedPadding+margin)) // U+A0 is ' ' (alternative space)
     }
 }
 
@@ -183,8 +187,8 @@ func unpackComponents(components: [Renderable]) -> [Renderable] {
 }
 
 func wrapLine(line: String, width: UInt16) -> [String] {
-    if line.trimmingCharacters(in: .whitespacesAndNewlines).count <= width {
-        return [line.trimmingCharacters(in: .whitespacesAndNewlines)]
+    if line.trimmingCharacters(in: CharacterSet(charactersIn: " \n")).count <= width { // Character set ignores U+A0 (alternative space)
+        return [line.trimmingCharacters(in: CharacterSet(charactersIn: " \n"))]
     }
     var lines = [String]()
     lines.append(String(line.prefix(Int(width))))
@@ -204,8 +208,8 @@ public func wrapLines(text: String, width: UInt16) -> String {
 }
 
 func wrapLineByWords(line: String, width: UInt16) -> [String] {
-    if stripANSICodes(line).trimmingCharacters(in: .whitespaces).count < width {
-        return [line.trimmingCharacters(in: .whitespacesAndNewlines)]
+    if stripANSICodes(line).trimmingCharacters(in: CharacterSet(charactersIn: " \n")).count < width {
+        return [line.trimmingCharacters(in: CharacterSet(charactersIn: " \n"))]
     }
     
     let words = line.split(separator: " ")
