@@ -26,7 +26,6 @@ public struct RawText: Renderable {
     }
 }
 
-// Add this helper function somewhere in the file
 public func stripANSICodes(_ text: String) -> String {
     // This regex matches ANSI escape sequences
     let pattern = "\u{001B}\\[.*?m"
